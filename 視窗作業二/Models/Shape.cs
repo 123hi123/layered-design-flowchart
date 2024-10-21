@@ -9,7 +9,6 @@ namespace 視窗作業二.Models
     public class Shape
     {
         public string ShapeName { get; set; }
-        //public string Text { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
         public int Width { get; set; }

@@ -41,13 +41,7 @@
             this.textBox_Text = new System.Windows.Forms.TextBox();
             this.comboBox_shape = new System.Windows.Forms.ComboBox();
             this.button_add_new = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.說明ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.關於ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataGridView = new System.Windows.Forms.DataGridView();
             this.DeleteButton = new System.Windows.Forms.DataGridViewButtonColumn();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Shape = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,8 +50,14 @@
             this.Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Length_grid = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Width_grid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.說明ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.關於ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -76,7 +76,7 @@
             this.groupBox1.Controls.Add(this.textBox_Text);
             this.groupBox1.Controls.Add(this.comboBox_shape);
             this.groupBox1.Controls.Add(this.button_add_new);
-            this.groupBox1.Controls.Add(this.dataGridView1);
+            this.groupBox1.Controls.Add(this.dataGridView);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Right;
             this.groupBox1.Font = new System.Drawing.Font("新細明體", 9F);
             this.groupBox1.Location = new System.Drawing.Point(954, 27);
@@ -202,15 +202,15 @@
             this.button_add_new.UseVisualStyleBackColor = true;
             this.button_add_new.Click += new System.EventHandler(this.button_add_new_Click_1);
             // 
-            // dataGridView1
+            // dataGridView
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToResizeColumns = false;
-            this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.AllowUserToResizeColumns = false;
+            this.dataGridView.AllowUserToResizeRows = false;
+            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.DeleteButton,
             this.ID,
             this.Shape,
@@ -219,72 +219,17 @@
             this.Y,
             this.Length_grid,
             this.Width_grid});
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 102);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.RowTemplate.Height = 27;
-            this.dataGridView1.Size = new System.Drawing.Size(505, 628);
-            this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
-            // 
-            // dataGridView2
-            // 
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dataGridView2.Location = new System.Drawing.Point(0, 27);
-            this.dataGridView2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.RowHeadersWidth = 51;
-            this.dataGridView2.RowTemplate.Height = 27;
-            this.dataGridView2.Size = new System.Drawing.Size(211, 732);
-            this.dataGridView2.TabIndex = 2;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(12, 162);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(172, 118);
-            this.button1.TabIndex = 3;
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(12, 40);
-            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(172, 118);
-            this.button2.TabIndex = 4;
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.說明ToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1465, 27);
-            this.menuStrip1.TabIndex = 5;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // 說明ToolStripMenuItem
-            // 
-            this.說明ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.關於ToolStripMenuItem});
-            this.說明ToolStripMenuItem.Name = "說明ToolStripMenuItem";
-            this.說明ToolStripMenuItem.Size = new System.Drawing.Size(53, 23);
-            this.說明ToolStripMenuItem.Text = "說明";
-            // 
-            // 關於ToolStripMenuItem
-            // 
-            this.關於ToolStripMenuItem.Name = "關於ToolStripMenuItem";
-            this.關於ToolStripMenuItem.Size = new System.Drawing.Size(122, 26);
-            this.關於ToolStripMenuItem.Text = "關於";
+            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dataGridView.Location = new System.Drawing.Point(3, 102);
+            this.dataGridView.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dataGridView.Name = "dataGridView";
+            this.dataGridView.ReadOnly = true;
+            this.dataGridView.RowHeadersVisible = false;
+            this.dataGridView.RowHeadersWidth = 51;
+            this.dataGridView.RowTemplate.Height = 27;
+            this.dataGridView.Size = new System.Drawing.Size(505, 628);
+            this.dataGridView.TabIndex = 0;
+            this.dataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
             // 
             // DeleteButton
             // 
@@ -353,6 +298,61 @@
             this.Width_grid.ReadOnly = true;
             this.Width_grid.Width = 51;
             // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.dataGridView2.Location = new System.Drawing.Point(0, 27);
+            this.dataGridView2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.RowHeadersWidth = 51;
+            this.dataGridView2.RowTemplate.Height = 27;
+            this.dataGridView2.Size = new System.Drawing.Size(211, 732);
+            this.dataGridView2.TabIndex = 2;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(12, 162);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(172, 118);
+            this.button1.TabIndex = 3;
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(12, 40);
+            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(172, 118);
+            this.button2.TabIndex = 4;
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.說明ToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1465, 27);
+            this.menuStrip1.TabIndex = 5;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // 說明ToolStripMenuItem
+            // 
+            this.說明ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.關於ToolStripMenuItem});
+            this.說明ToolStripMenuItem.Name = "說明ToolStripMenuItem";
+            this.說明ToolStripMenuItem.Size = new System.Drawing.Size(53, 23);
+            this.說明ToolStripMenuItem.Text = "說明";
+            // 
+            // 關於ToolStripMenuItem
+            // 
+            this.關於ToolStripMenuItem.Name = "關於ToolStripMenuItem";
+            this.關於ToolStripMenuItem.Size = new System.Drawing.Size(122, 26);
+            this.關於ToolStripMenuItem.Text = "關於";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -369,7 +369,7 @@
             this.Text = "MyDrawing";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -393,7 +393,7 @@
         private System.Windows.Forms.TextBox textBox_Text;
         private System.Windows.Forms.ComboBox comboBox_shape;
         private System.Windows.Forms.Button button_add_new;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;

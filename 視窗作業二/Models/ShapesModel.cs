@@ -8,28 +8,22 @@ namespace 視窗作業二.Models
 {
     public class ShapesModel
     {
-        private Dictionary<int, Shape> shapes = new Dictionary<int, Shape>();
-        private int nextId = 0; // 用于生成唯一的 ID
+        private Dictionary<int, Shape> _shapes = new Dictionary<int, Shape>();
+        private int _nextId = 0; // 用于生成唯一的 ID
 
-        public bool Valid(List<string> shapeData)
+        public bool Valid(ShapeData shapeData)
         {
-            // 確保列表至少有6個元素
-            if (shapeData.Count < 6)
+            // 驗證形狀類型和名稱不為空
+            if (string.IsNullOrEmpty(shapeData.ShapeType) || string.IsNullOrEmpty(shapeData.ShapeName))
             {
                 return false;
             }
 
-            // 驗證形狀名稱和文本不為空
-            if (string.IsNullOrEmpty(shapeData[0]) || string.IsNullOrEmpty(shapeData[1]))
-            {
-                return false;
-            }
-
-            // 驗證 X, Y, Width, Height 是否為有效的非負整數
-            if (!int.TryParse(shapeData[2], out int x) ||
-                !int.TryParse(shapeData[3], out int y) ||
-                !int.TryParse(shapeData[4], out int width) || width <= 0 ||
-                !int.TryParse(shapeData[5], out int height) || height <= 0)
+            // 驗證 X, Y, Width, Height 是否為有效
+            if (!int.TryParse(shapeData.X, out int x) ||
+                !int.TryParse(shapeData.Y, out int y) ||
+                !int.TryParse(shapeData.Width, out int width) || width <= 0 ||
+                !int.TryParse(shapeData.Height, out int height) || height <= 0)
             {
                 return false;
             }
@@ -37,27 +31,27 @@ namespace 視窗作業二.Models
             return true;
         }
 
-        public int AddShape(List<string> shapeData)
+        public int AddShape(ShapeData shapeData)
         {
             Shape shape = Factories.ShapeFactory.CreateShape(shapeData);
-            int id = nextId++;
-            shapes.Add(id, shape);
+            int id = _nextId++;
+            _shapes.Add(id, shape);
             return id; // 返回新添加形状的 ID
         }
 
         public void RemoveShape(int id)
         {
-            shapes.Remove(id);
+            _shapes.Remove(id);
         }
 
         public List<Shape> GetShapes()
         {
-            return shapes.Values.ToList();
+            return _shapes.Values.ToList();
         }
 
         public Shape GetShape(int id)
         {
-            if (shapes.TryGetValue(id, out Shape shape))
+            if (_shapes.TryGetValue(id, out Shape shape))
             {
                 return shape;
             }

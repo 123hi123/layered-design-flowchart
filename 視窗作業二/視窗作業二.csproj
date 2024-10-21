@@ -54,8 +54,13 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Shape.cs" />
+    <Compile Include="Models\ShapeData.cs" />
     <Compile Include="Models\ShapeFactory.cs" />
     <Compile Include="Models\ShapesModel.cs" />
+    <Compile Include="Models\Shapes\Decision.cs" />
+    <Compile Include="Models\Shapes\Process.cs" />
+    <Compile Include="Models\Shapes\Terminator.cs" />
+    <Compile Include="Models\Shapes\Start.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using 視窗作業二.Models;
+using 視窗作業二.Shapes;
 
 namespace 視窗作業二.Factories
 {
-    public class Start : Shape { }
-    public class Terminator : Shape { }
-    public class Process : Shape { }
-    public class Decision : Shape { }
 
     public static class ShapeFactory
     {
-        public static Shape CreateShape(List<string> shapeData)
+        public static Shape CreateShape(ShapeData shapeData)
         {
             Shape newShape;
 
-            switch (shapeData[0])
+            switch (shapeData.ShapeType)
             {
                 case "Start":
                     newShape = new Start();
@@ -30,15 +27,15 @@ namespace 視窗作業二.Factories
                     newShape = new Decision();
                     break;
                 default:
-                    throw new ArgumentException($"Unknown shape type: {shapeData[0]}");
+                    throw new ArgumentException($"Unknown shape type: {shapeData.ShapeType}");
             }
 
-            // Copy properties from baseShape to newShape
-            newShape.ShapeName = shapeData[1];
-            newShape.X = int.Parse(shapeData[2]);
-            newShape.Y = int.Parse(shapeData[3]);
-            newShape.Width = int.Parse(shapeData[4]);
-            newShape.Height = int.Parse(shapeData[5]);
+            // Copy properties from shapeData to newShape
+            newShape.ShapeName = shapeData.ShapeName;
+            newShape.X = int.Parse(shapeData.X);
+            newShape.Y = int.Parse(shapeData.Y);
+            newShape.Width = int.Parse(shapeData.Width);
+            newShape.Height = int.Parse(shapeData.Height);
 
             return newShape;
         }
