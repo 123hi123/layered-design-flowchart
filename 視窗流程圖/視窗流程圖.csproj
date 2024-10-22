@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{679C9C0F-06E1-41C1-B686-38DAFFA07C37}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>視窗作業二</RootNamespace>
-    <AssemblyName>視窗作業二</AssemblyName>
+    <RootNamespace>視窗流程圖</RootNamespace>
+    <AssemblyName>視窗流程圖</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
