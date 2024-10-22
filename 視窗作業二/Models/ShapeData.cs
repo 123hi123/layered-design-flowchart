@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace 視窗作業二.Models
+namespace 視窗流程圖.Models
 {
     public class ShapeData
     {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "視窗作業二", "視窗作業二\視窗作業二.csproj", "{679C9C0F-06E1-41C1-B686-38DAFFA07C37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "視窗流程圖", "視窗作業二\視窗流程圖.csproj", "{679C9C0F-06E1-41C1-B686-38DAFFA07C37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

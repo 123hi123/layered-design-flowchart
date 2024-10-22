@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace 視窗作業二.Properties
+namespace 視窗流程圖.Properties
 {
 
 

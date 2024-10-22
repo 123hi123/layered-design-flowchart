@@ -1,6 +1,6 @@
-﻿using 視窗作業二.Models;
+﻿using 視窗流程圖.Models;
 
-namespace 視窗作業二.Shapes
+namespace 視窗流程圖.Shapes
 {
     public class Decision : Shape
     {

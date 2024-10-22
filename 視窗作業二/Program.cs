@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace 視窗作業二
+namespace 視窗流程圖
 {
     internal static class Program
     {

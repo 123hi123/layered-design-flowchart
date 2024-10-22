@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
-using 視窗作業二.Controllers;
-using 視窗作業二.Models;
+using 視窗流程圖.Controllers;
+using 視窗流程圖.Models;
 
-namespace 視窗作業二
+namespace 視窗流程圖
 {
     public partial class Form1 : Form
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using 視窗作業二.Models;
+using 視窗流程圖.Models;
 
-namespace 視窗作業二.Controllers
+namespace 視窗流程圖.Controllers
 {
     public class ShapesController
     {

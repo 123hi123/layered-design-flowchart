@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using 視窗作業二.Models;
-using 視窗作業二.Shapes;
+using 視窗流程圖.Models;
+using 視窗流程圖.Shapes;
 
-namespace 視窗作業二.Factories
+namespace 視窗流程圖.Factories
 {
 
     public static class ShapeFactory
