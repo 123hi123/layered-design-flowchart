@@ -35,7 +35,7 @@ namespace 視窗流程圖
         private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
             // 檢查是否點擊了 "刪除" 按鈕列
-            if (e.ColumnIndex == dataGridView.Columns["DeleteButton"].Index && e.RowIndex >= 0)
+            if (e.ColumnIndex == shapeDataGridView.Columns["DeleteButton"].Index && e.RowIndex >= 0)
             {
                 _controller.DeleteShape(e.RowIndex);
             }
@@ -44,15 +44,15 @@ namespace 視窗流程圖
         // Controller 用於添加行的方法
         public void AddShapeToGrid(int id, ShapeData shapeData)
         {
-            dataGridView.Rows.Add("刪除", id, shapeData.ShapeType, shapeData.ShapeName, shapeData.X, shapeData.Y, shapeData.Width, shapeData.Height);
+            shapeDataGridView.Rows.Add("刪除", id, shapeData.ShapeType, shapeData.ShapeName, shapeData.X, shapeData.Y, shapeData.Width, shapeData.Height);
         }
 
         // Controller 用於移除行的方法
         public void RemoveShapeFromGrid(int rowIndex)
         {
-            if (rowIndex >= 0 && rowIndex < dataGridView.Rows.Count)
+            if (rowIndex >= 0 && rowIndex < shapeDataGridView.Rows.Count)
             {
-                dataGridView.Rows.RemoveAt(rowIndex);
+                shapeDataGridView.Rows.RemoveAt(rowIndex);
             }
         }
 
@@ -65,7 +65,7 @@ namespace 視窗流程圖
         // 從指定行獲取 ID
         public int GetIdFromRow(int rowIndex)
         {
-            return Convert.ToInt32(dataGridView.Rows[rowIndex].Cells["ID"].Value);
+            return Convert.ToInt32(shapeDataGridView.Rows[rowIndex].Cells["ID"].Value);
         }
     }
 }
