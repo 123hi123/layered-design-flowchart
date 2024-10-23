@@ -41,7 +41,7 @@
             this.textBox_Text = new System.Windows.Forms.TextBox();
             this.comboBox_shape = new System.Windows.Forms.ComboBox();
             this.AddNewShapeButtom = new System.Windows.Forms.Button();
-            this.shapeDataGridView = new System.Windows.Forms.DataGridView();
+            this.ShapeDataGridView = new System.Windows.Forms.DataGridView();
             this.DeleteButton = new System.Windows.Forms.DataGridViewButtonColumn();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Shape = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -57,7 +57,7 @@
             this.說明ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.關於ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.shapeDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ShapeDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -76,13 +76,13 @@
             this.groupBox1.Controls.Add(this.textBox_Text);
             this.groupBox1.Controls.Add(this.comboBox_shape);
             this.groupBox1.Controls.Add(this.AddNewShapeButtom);
-            this.groupBox1.Controls.Add(this.shapeDataGridView);
+            this.groupBox1.Controls.Add(this.ShapeDataGridView);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Right;
             this.groupBox1.Font = new System.Drawing.Font("新細明體", 9F);
             this.groupBox1.Location = new System.Drawing.Point(716, 24);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(383, 583);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
@@ -141,7 +141,7 @@
             // textBox_Y
             // 
             this.textBox_Y.Location = new System.Drawing.Point(225, 46);
-            this.textBox_Y.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Y.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Y.Name = "textBox_Y";
             this.textBox_Y.Size = new System.Drawing.Size(32, 22);
             this.textBox_Y.TabIndex = 10;
@@ -149,7 +149,7 @@
             // textBox_Height
             // 
             this.textBox_Height.Location = new System.Drawing.Point(260, 46);
-            this.textBox_Height.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Height.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Height.Name = "textBox_Height";
             this.textBox_Height.Size = new System.Drawing.Size(33, 22);
             this.textBox_Height.TabIndex = 9;
@@ -157,7 +157,7 @@
             // textBox_Width
             // 
             this.textBox_Width.Location = new System.Drawing.Point(297, 46);
-            this.textBox_Width.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Width.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Width.Name = "textBox_Width";
             this.textBox_Width.Size = new System.Drawing.Size(25, 22);
             this.textBox_Width.TabIndex = 8;
@@ -165,7 +165,7 @@
             // textBox_X
             // 
             this.textBox_X.Location = new System.Drawing.Point(196, 46);
-            this.textBox_X.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_X.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_X.Name = "textBox_X";
             this.textBox_X.Size = new System.Drawing.Size(25, 22);
             this.textBox_X.TabIndex = 7;
@@ -173,7 +173,7 @@
             // textBox_Text
             // 
             this.textBox_Text.Location = new System.Drawing.Point(141, 46);
-            this.textBox_Text.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox_Text.Margin = new System.Windows.Forms.Padding(2);
             this.textBox_Text.Name = "textBox_Text";
             this.textBox_Text.Size = new System.Drawing.Size(52, 22);
             this.textBox_Text.TabIndex = 3;
@@ -190,7 +190,7 @@
             "Process",
             "Decision"});
             this.comboBox_shape.Location = new System.Drawing.Point(65, 47);
-            this.comboBox_shape.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBox_shape.Margin = new System.Windows.Forms.Padding(2);
             this.comboBox_shape.Name = "comboBox_shape";
             this.comboBox_shape.Size = new System.Drawing.Size(61, 20);
             this.comboBox_shape.TabIndex = 2;
@@ -199,23 +199,23 @@
             // 
             this.AddNewShapeButtom.AutoEllipsis = true;
             this.AddNewShapeButtom.Location = new System.Drawing.Point(4, 16);
-            this.AddNewShapeButtom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.AddNewShapeButtom.Margin = new System.Windows.Forms.Padding(2);
             this.AddNewShapeButtom.Name = "AddNewShapeButtom";
             this.AddNewShapeButtom.Size = new System.Drawing.Size(56, 50);
             this.AddNewShapeButtom.TabIndex = 1;
             this.AddNewShapeButtom.Text = "新增";
             this.AddNewShapeButtom.UseVisualStyleBackColor = true;
-            this.AddNewShapeButtom.Click += new System.EventHandler(this.button_add_new_Click_1);
+            this.AddNewShapeButtom.Click += new System.EventHandler(this.AddNewShapeButtomClick);
             // 
-            // shapeDataGridView
+            // ShapeDataGridView
             // 
-            this.shapeDataGridView.AllowUserToAddRows = false;
-            this.shapeDataGridView.AllowUserToDeleteRows = false;
-            this.shapeDataGridView.AllowUserToResizeColumns = false;
-            this.shapeDataGridView.AllowUserToResizeRows = false;
-            this.shapeDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
-            this.shapeDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.shapeDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ShapeDataGridView.AllowUserToAddRows = false;
+            this.ShapeDataGridView.AllowUserToDeleteRows = false;
+            this.ShapeDataGridView.AllowUserToResizeColumns = false;
+            this.ShapeDataGridView.AllowUserToResizeRows = false;
+            this.ShapeDataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            this.ShapeDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ShapeDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.DeleteButton,
             this.ID,
             this.Shape,
@@ -224,17 +224,17 @@
             this.Y,
             this.Length_grid,
             this.Width_grid});
-            this.shapeDataGridView.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.shapeDataGridView.Location = new System.Drawing.Point(2, 79);
-            this.shapeDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.shapeDataGridView.Name = "shapeDataGridView";
-            this.shapeDataGridView.ReadOnly = true;
-            this.shapeDataGridView.RowHeadersVisible = false;
-            this.shapeDataGridView.RowHeadersWidth = 51;
-            this.shapeDataGridView.RowTemplate.Height = 27;
-            this.shapeDataGridView.Size = new System.Drawing.Size(379, 502);
-            this.shapeDataGridView.TabIndex = 0;
-            this.shapeDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
+            this.ShapeDataGridView.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.ShapeDataGridView.Location = new System.Drawing.Point(2, 79);
+            this.ShapeDataGridView.Margin = new System.Windows.Forms.Padding(2);
+            this.ShapeDataGridView.Name = "ShapeDataGridView";
+            this.ShapeDataGridView.ReadOnly = true;
+            this.ShapeDataGridView.RowHeadersVisible = false;
+            this.ShapeDataGridView.RowHeadersWidth = 51;
+            this.ShapeDataGridView.RowTemplate.Height = 27;
+            this.ShapeDataGridView.Size = new System.Drawing.Size(379, 502);
+            this.ShapeDataGridView.TabIndex = 0;
+            this.ShapeDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ShapeDataGridViewClick);
             // 
             // DeleteButton
             // 
@@ -308,7 +308,7 @@
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Left;
             this.dataGridView2.Location = new System.Drawing.Point(0, 24);
-            this.dataGridView2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dataGridView2.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.RowHeadersWidth = 51;
             this.dataGridView2.RowTemplate.Height = 27;
@@ -318,7 +318,7 @@
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(9, 130);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(129, 94);
             this.button1.TabIndex = 3;
@@ -327,7 +327,7 @@
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(9, 32);
-            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(129, 94);
             this.button2.TabIndex = 4;
@@ -370,12 +370,12 @@
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "MyDrawing";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.shapeDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ShapeDataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -399,7 +399,7 @@
         private System.Windows.Forms.TextBox textBox_Text;
         private System.Windows.Forms.ComboBox comboBox_shape;
         private System.Windows.Forms.Button AddNewShapeButtom;
-        private System.Windows.Forms.DataGridView shapeDataGridView;
+        private System.Windows.Forms.DataGridView ShapeDataGridView;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
