@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -56,10 +57,16 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.說明ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.關於ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ShapeSelectToolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ShapeDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            this.ShapeSelectToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -77,13 +84,12 @@
             this.groupBox1.Controls.Add(this.comboBox_shape);
             this.groupBox1.Controls.Add(this.AddNewShapeButtom);
             this.groupBox1.Controls.Add(this.ShapeDataGridView);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Right;
             this.groupBox1.Font = new System.Drawing.Font("新細明體", 9F);
-            this.groupBox1.Location = new System.Drawing.Point(716, 24);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBox1.Location = new System.Drawing.Point(954, 27);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(383, 583);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox1.Size = new System.Drawing.Size(511, 732);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "資料顯示";
@@ -91,91 +97,86 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(296, 31);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Location = new System.Drawing.Point(395, 39);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(16, 12);
+            this.label5.Size = new System.Drawing.Size(20, 15);
             this.label5.TabIndex = 15;
             this.label5.Text = "W";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(258, 31);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Location = new System.Drawing.Point(344, 39);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(13, 12);
+            this.label4.Size = new System.Drawing.Size(17, 15);
             this.label4.TabIndex = 14;
             this.label4.Text = "H";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(224, 31);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Location = new System.Drawing.Point(299, 39);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(13, 12);
+            this.label3.Size = new System.Drawing.Size(17, 15);
             this.label3.TabIndex = 13;
             this.label3.Text = "Y";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(194, 31);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(259, 39);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(13, 12);
+            this.label2.Size = new System.Drawing.Size(17, 15);
             this.label2.TabIndex = 12;
             this.label2.Text = "X";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(149, 31);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(199, 39);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(29, 12);
+            this.label1.Size = new System.Drawing.Size(37, 15);
             this.label1.TabIndex = 11;
             this.label1.Text = "文字";
             // 
             // textBox_Y
             // 
-            this.textBox_Y.Location = new System.Drawing.Point(225, 46);
-            this.textBox_Y.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_Y.Location = new System.Drawing.Point(300, 58);
+            this.textBox_Y.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox_Y.Name = "textBox_Y";
-            this.textBox_Y.Size = new System.Drawing.Size(32, 22);
+            this.textBox_Y.Size = new System.Drawing.Size(41, 25);
             this.textBox_Y.TabIndex = 10;
             // 
             // textBox_Height
             // 
-            this.textBox_Height.Location = new System.Drawing.Point(260, 46);
-            this.textBox_Height.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_Height.Location = new System.Drawing.Point(347, 58);
+            this.textBox_Height.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox_Height.Name = "textBox_Height";
-            this.textBox_Height.Size = new System.Drawing.Size(33, 22);
+            this.textBox_Height.Size = new System.Drawing.Size(43, 25);
             this.textBox_Height.TabIndex = 9;
             // 
             // textBox_Width
             // 
-            this.textBox_Width.Location = new System.Drawing.Point(297, 46);
-            this.textBox_Width.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_Width.Location = new System.Drawing.Point(396, 58);
+            this.textBox_Width.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox_Width.Name = "textBox_Width";
-            this.textBox_Width.Size = new System.Drawing.Size(25, 22);
+            this.textBox_Width.Size = new System.Drawing.Size(32, 25);
             this.textBox_Width.TabIndex = 8;
             // 
             // textBox_X
             // 
-            this.textBox_X.Location = new System.Drawing.Point(196, 46);
-            this.textBox_X.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_X.Location = new System.Drawing.Point(261, 58);
+            this.textBox_X.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox_X.Name = "textBox_X";
-            this.textBox_X.Size = new System.Drawing.Size(25, 22);
+            this.textBox_X.Size = new System.Drawing.Size(32, 25);
             this.textBox_X.TabIndex = 7;
             // 
             // textBox_Text
             // 
-            this.textBox_Text.Location = new System.Drawing.Point(141, 46);
-            this.textBox_Text.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox_Text.Location = new System.Drawing.Point(188, 58);
+            this.textBox_Text.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox_Text.Name = "textBox_Text";
-            this.textBox_Text.Size = new System.Drawing.Size(52, 22);
+            this.textBox_Text.Size = new System.Drawing.Size(68, 25);
             this.textBox_Text.TabIndex = 3;
             // 
             // comboBox_shape
@@ -189,19 +190,19 @@
             "Terminator",
             "Process",
             "Decision"});
-            this.comboBox_shape.Location = new System.Drawing.Point(65, 47);
-            this.comboBox_shape.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBox_shape.Location = new System.Drawing.Point(87, 59);
+            this.comboBox_shape.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox_shape.Name = "comboBox_shape";
-            this.comboBox_shape.Size = new System.Drawing.Size(61, 20);
+            this.comboBox_shape.Size = new System.Drawing.Size(80, 23);
             this.comboBox_shape.TabIndex = 2;
             // 
             // AddNewShapeButtom
             // 
             this.AddNewShapeButtom.AutoEllipsis = true;
-            this.AddNewShapeButtom.Location = new System.Drawing.Point(4, 16);
-            this.AddNewShapeButtom.Margin = new System.Windows.Forms.Padding(2);
+            this.AddNewShapeButtom.Location = new System.Drawing.Point(5, 20);
+            this.AddNewShapeButtom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.AddNewShapeButtom.Name = "AddNewShapeButtom";
-            this.AddNewShapeButtom.Size = new System.Drawing.Size(56, 50);
+            this.AddNewShapeButtom.Size = new System.Drawing.Size(75, 62);
             this.AddNewShapeButtom.TabIndex = 1;
             this.AddNewShapeButtom.Text = "新增";
             this.AddNewShapeButtom.UseVisualStyleBackColor = true;
@@ -225,14 +226,14 @@
             this.Length_grid,
             this.Width_grid});
             this.ShapeDataGridView.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.ShapeDataGridView.Location = new System.Drawing.Point(2, 79);
-            this.ShapeDataGridView.Margin = new System.Windows.Forms.Padding(2);
+            this.ShapeDataGridView.Location = new System.Drawing.Point(3, 129);
+            this.ShapeDataGridView.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ShapeDataGridView.Name = "ShapeDataGridView";
             this.ShapeDataGridView.ReadOnly = true;
             this.ShapeDataGridView.RowHeadersVisible = false;
             this.ShapeDataGridView.RowHeadersWidth = 51;
             this.ShapeDataGridView.RowTemplate.Height = 27;
-            this.ShapeDataGridView.Size = new System.Drawing.Size(379, 502);
+            this.ShapeDataGridView.Size = new System.Drawing.Size(505, 601);
             this.ShapeDataGridView.TabIndex = 0;
             this.ShapeDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ShapeDataGridViewClick);
             // 
@@ -244,7 +245,7 @@
             this.DeleteButton.ReadOnly = true;
             this.DeleteButton.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.DeleteButton.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.DeleteButton.Width = 54;
+            this.DeleteButton.Width = 66;
             // 
             // ID
             // 
@@ -253,7 +254,7 @@
             this.ID.MinimumWidth = 6;
             this.ID.Name = "ID";
             this.ID.ReadOnly = true;
-            this.ID.Width = 42;
+            this.ID.Width = 51;
             // 
             // Shape
             // 
@@ -261,7 +262,7 @@
             this.Shape.MinimumWidth = 6;
             this.Shape.Name = "Shape";
             this.Shape.ReadOnly = true;
-            this.Shape.Width = 54;
+            this.Shape.Width = 66;
             // 
             // Text_grid
             // 
@@ -269,7 +270,7 @@
             this.Text_grid.MinimumWidth = 6;
             this.Text_grid.Name = "Text_grid";
             this.Text_grid.ReadOnly = true;
-            this.Text_grid.Width = 54;
+            this.Text_grid.Width = 66;
             // 
             // X
             // 
@@ -277,7 +278,7 @@
             this.X.MinimumWidth = 6;
             this.X.Name = "X";
             this.X.ReadOnly = true;
-            this.X.Width = 38;
+            this.X.Width = 46;
             // 
             // Y
             // 
@@ -285,7 +286,7 @@
             this.Y.MinimumWidth = 6;
             this.Y.Name = "Y";
             this.Y.ReadOnly = true;
-            this.Y.Width = 38;
+            this.Y.Width = 46;
             // 
             // Length_grid
             // 
@@ -293,7 +294,7 @@
             this.Length_grid.MinimumWidth = 6;
             this.Length_grid.Name = "Length_grid";
             this.Length_grid.ReadOnly = true;
-            this.Length_grid.Width = 42;
+            this.Length_grid.Width = 51;
             // 
             // Width_grid
             // 
@@ -301,35 +302,34 @@
             this.Width_grid.MinimumWidth = 6;
             this.Width_grid.Name = "Width_grid";
             this.Width_grid.ReadOnly = true;
-            this.Width_grid.Width = 42;
+            this.Width_grid.Width = 51;
             // 
             // dataGridView2
             // 
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.dataGridView2.Location = new System.Drawing.Point(0, 24);
-            this.dataGridView2.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridView2.Location = new System.Drawing.Point(0, 56);
+            this.dataGridView2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.RowHeadersWidth = 51;
             this.dataGridView2.RowTemplate.Height = 27;
-            this.dataGridView2.Size = new System.Drawing.Size(158, 583);
+            this.dataGridView2.Size = new System.Drawing.Size(211, 703);
             this.dataGridView2.TabIndex = 2;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(9, 130);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
+            this.button1.Location = new System.Drawing.Point(12, 208);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(129, 94);
+            this.button1.Size = new System.Drawing.Size(172, 118);
             this.button1.TabIndex = 3;
             this.button1.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(9, 32);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
+            this.button2.Location = new System.Drawing.Point(12, 86);
+            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(129, 94);
+            this.button2.Size = new System.Drawing.Size(172, 118);
             this.button2.TabIndex = 4;
             this.button2.UseVisualStyleBackColor = true;
             // 
@@ -340,8 +340,8 @@
             this.說明ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1099, 24);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(1465, 27);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -350,27 +350,78 @@
             this.說明ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.關於ToolStripMenuItem});
             this.說明ToolStripMenuItem.Name = "說明ToolStripMenuItem";
-            this.說明ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.說明ToolStripMenuItem.Size = new System.Drawing.Size(53, 26);
             this.說明ToolStripMenuItem.Text = "說明";
             // 
             // 關於ToolStripMenuItem
             // 
             this.關於ToolStripMenuItem.Name = "關於ToolStripMenuItem";
-            this.關於ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.關於ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.關於ToolStripMenuItem.Text = "關於";
+            // 
+            // ShapeSelectToolStrip
+            // 
+            this.ShapeSelectToolStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.ShapeSelectToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton1,
+            this.toolStripButton2,
+            this.toolStripButton3,
+            this.toolStripButton4});
+            this.ShapeSelectToolStrip.Location = new System.Drawing.Point(0, 27);
+            this.ShapeSelectToolStrip.Name = "ShapeSelectToolStrip";
+            this.ShapeSelectToolStrip.Size = new System.Drawing.Size(1465, 27);
+            this.ShapeSelectToolStrip.TabIndex = 6;
+            this.ShapeSelectToolStrip.Text = "toolStrip1";
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(29, 24);
+            this.toolStripButton1.Text = "StartToolStripButton";
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButton2.Text = "TerminatorToolStripButton";
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(29, 24);
+            this.toolStripButton3.Text = "ProcessToolStripButton";
+            // 
+            // toolStripButton4
+            // 
+            this.toolStripButton4.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
+            this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton4.Name = "toolStripButton4";
+            this.toolStripButton4.Size = new System.Drawing.Size(29, 24);
+            this.toolStripButton4.Text = "DecisionToolStripButton";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1099, 607);
+            this.ClientSize = new System.Drawing.Size(1465, 759);
+            this.Controls.Add(this.ShapeSelectToolStrip);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "MyDrawing";
             this.groupBox1.ResumeLayout(false);
@@ -379,6 +430,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.ShapeSelectToolStrip.ResumeLayout(false);
+            this.ShapeSelectToolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -414,6 +467,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Y;
         private System.Windows.Forms.DataGridViewTextBoxColumn Length_grid;
         private System.Windows.Forms.DataGridViewTextBoxColumn Width_grid;
+        private System.Windows.Forms.ToolStrip ShapeSelectToolStrip;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripButton toolStripButton3;
+        private System.Windows.Forms.ToolStripButton toolStripButton4;
     }
 }
 
