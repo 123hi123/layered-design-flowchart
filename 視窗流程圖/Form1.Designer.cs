@@ -1,4 +1,6 @@
-﻿namespace 視窗流程圖
+﻿using System;
+
+namespace 視窗流程圖
 {
     partial class Form1
     {
@@ -85,11 +87,11 @@
             this.groupBox1.Controls.Add(this.AddNewShapeButtom);
             this.groupBox1.Controls.Add(this.ShapeDataGridView);
             this.groupBox1.Font = new System.Drawing.Font("新細明體", 9F);
-            this.groupBox1.Location = new System.Drawing.Point(954, 27);
+            this.groupBox1.Location = new System.Drawing.Point(954, 86);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(511, 732);
+            this.groupBox1.Size = new System.Drawing.Size(511, 673);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "資料顯示";
@@ -226,14 +228,14 @@
             this.Length_grid,
             this.Width_grid});
             this.ShapeDataGridView.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.ShapeDataGridView.Location = new System.Drawing.Point(3, 129);
+            this.ShapeDataGridView.Location = new System.Drawing.Point(3, 101);
             this.ShapeDataGridView.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ShapeDataGridView.Name = "ShapeDataGridView";
             this.ShapeDataGridView.ReadOnly = true;
             this.ShapeDataGridView.RowHeadersVisible = false;
             this.ShapeDataGridView.RowHeadersWidth = 51;
             this.ShapeDataGridView.RowTemplate.Height = 27;
-            this.ShapeDataGridView.Size = new System.Drawing.Size(505, 601);
+            this.ShapeDataGridView.Size = new System.Drawing.Size(505, 570);
             this.ShapeDataGridView.TabIndex = 0;
             this.ShapeDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.ShapeDataGridViewClick);
             // 
@@ -341,7 +343,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1465, 27);
+            this.menuStrip1.Size = new System.Drawing.Size(1465, 30);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -356,7 +358,7 @@
             // 關於ToolStripMenuItem
             // 
             this.關於ToolStripMenuItem.Name = "關於ToolStripMenuItem";
-            this.關於ToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.關於ToolStripMenuItem.Size = new System.Drawing.Size(122, 26);
             this.關於ToolStripMenuItem.Text = "關於";
             // 
             // ShapeSelectToolStrip
@@ -367,9 +369,9 @@
             this.toolStripButton2,
             this.toolStripButton3,
             this.toolStripButton4});
-            this.ShapeSelectToolStrip.Location = new System.Drawing.Point(0, 27);
+            this.ShapeSelectToolStrip.Location = new System.Drawing.Point(0, 30);
             this.ShapeSelectToolStrip.Name = "ShapeSelectToolStrip";
-            this.ShapeSelectToolStrip.Size = new System.Drawing.Size(1465, 27);
+            this.ShapeSelectToolStrip.Size = new System.Drawing.Size(1465, 31);
             this.ShapeSelectToolStrip.TabIndex = 6;
             this.ShapeSelectToolStrip.Text = "toolStrip1";
             // 
@@ -379,8 +381,9 @@
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(29, 24);
+            this.toolStripButton1.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton1.Text = "StartToolStripButton";
+            this.toolStripButton1.Click += new System.EventHandler(this.StartToolStripButtonClick);
             // 
             // toolStripButton2
             // 
@@ -390,6 +393,7 @@
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton2.Text = "TerminatorToolStripButton";
+            this.toolStripButton2.Click += new System.EventHandler(this.TerminatorToolStripButtonClick);
             // 
             // toolStripButton3
             // 
@@ -397,8 +401,9 @@
             this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
             this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(29, 24);
+            this.toolStripButton3.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton3.Text = "ProcessToolStripButton";
+            this.toolStripButton3.Click += new System.EventHandler(this.ProcessToolStripButtonClick);
             // 
             // toolStripButton4
             // 
@@ -406,8 +411,9 @@
             this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(29, 24);
+            this.toolStripButton4.Size = new System.Drawing.Size(29, 28);
             this.toolStripButton4.Text = "DecisionToolStripButton";
+            this.toolStripButton4.Click += new System.EventHandler(this.DecisionToolStripButtonClick);
             // 
             // Form1
             // 
@@ -434,6 +440,65 @@
             this.ShapeSelectToolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
+            // 為 Labels 註冊事件
+            label1.MouseEnter += new EventHandler(ControlMouseEnter);
+            label1.MouseLeave += new EventHandler(ControlMouseLeave);
+            label2.MouseEnter += new EventHandler(ControlMouseEnter);
+            label2.MouseLeave += new EventHandler(ControlMouseLeave);
+            label3.MouseEnter += new EventHandler(ControlMouseEnter);
+            label3.MouseLeave += new EventHandler(ControlMouseLeave);
+            label4.MouseEnter += new EventHandler(ControlMouseEnter);
+            label4.MouseLeave += new EventHandler(ControlMouseLeave);
+            label5.MouseEnter += new EventHandler(ControlMouseEnter);
+            label5.MouseLeave += new EventHandler(ControlMouseLeave);
+
+            // 為 TextBoxes 註冊事件
+            textBox_X.MouseEnter += new EventHandler(ControlMouseEnter);
+            textBox_X.MouseLeave += new EventHandler(ControlMouseLeave);
+            textBox_Y.MouseEnter += new EventHandler(ControlMouseEnter);
+            textBox_Y.MouseLeave += new EventHandler(ControlMouseLeave);
+            textBox_Width.MouseEnter += new EventHandler(ControlMouseEnter);
+            textBox_Width.MouseLeave += new EventHandler(ControlMouseLeave);
+            textBox_Height.MouseEnter += new EventHandler(ControlMouseEnter);
+            textBox_Height.MouseLeave += new EventHandler(ControlMouseLeave);
+            textBox_Text.MouseEnter += new EventHandler(ControlMouseEnter);
+            textBox_Text.MouseLeave += new EventHandler(ControlMouseLeave);
+
+            // 為 Buttons 註冊事件
+            AddNewShapeButtom.MouseEnter += new EventHandler(ControlMouseEnter);
+            AddNewShapeButtom.MouseLeave += new EventHandler(ControlMouseLeave);
+            // 為 DataGridView 註冊事件
+            ShapeDataGridView.MouseEnter += new EventHandler(ControlMouseEnter);
+            ShapeDataGridView.MouseLeave += new EventHandler(ControlMouseLeave);
+            dataGridView2.MouseEnter += new EventHandler(ControlMouseEnter);
+            dataGridView2.MouseLeave += new EventHandler(ControlMouseLeave);
+
+            // 為 Buttons 註冊事件
+            button1.MouseEnter += new EventHandler(ControlMouseEnter);
+            button1.MouseLeave += new EventHandler(ControlMouseLeave);
+            button2.MouseEnter += new EventHandler(ControlMouseEnter);
+            button2.MouseLeave += new EventHandler(ControlMouseLeave);
+
+            // 為 ToolStrip 註冊事件
+            toolStripButton1.MouseEnter += new EventHandler(ControlMouseEnter);
+            toolStripButton1.MouseLeave += new EventHandler(ControlMouseLeave);
+            toolStripButton2.MouseEnter += new EventHandler(ControlMouseEnter);
+            toolStripButton2.MouseLeave += new EventHandler(ControlMouseLeave);
+            toolStripButton3.MouseEnter += new EventHandler(ControlMouseEnter);
+            toolStripButton3.MouseLeave += new EventHandler(ControlMouseLeave);
+            toolStripButton4.MouseEnter += new EventHandler(ControlMouseEnter);
+            toolStripButton4.MouseLeave += new EventHandler(ControlMouseLeave);
+
+            groupBox1.MouseEnter += new EventHandler(ControlMouseEnter);
+            groupBox1.MouseLeave += new EventHandler(ControlMouseLeave);
+
+            comboBox_shape.MouseEnter += new EventHandler(ControlMouseEnter);
+            comboBox_shape.MouseLeave += new EventHandler(ControlMouseLeave);
+
+            說明ToolStripMenuItem.MouseEnter += new EventHandler(ControlMouseEnter);
+            說明ToolStripMenuItem.MouseLeave += new EventHandler(ControlMouseLeave);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.FormMouseMove);
 
         }
 
