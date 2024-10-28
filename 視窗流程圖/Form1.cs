@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using 視窗流程圖.Controllers;
 using 視窗流程圖.Models;
@@ -9,11 +11,62 @@ namespace 視窗流程圖
     public partial class Form1 : Form
     {
         private ShapesController _controller;
+        private ShapesModel _model;
 
         public Form1()
         {
             InitializeComponent();
-            _controller = new ShapesController(this);
+            _model = new ShapesModel();
+            _model.ReRenderSign += ReRenderSign; // 綁定模型的 ShapeAdded 
+            this.DoubleBuffered = true;
+            _controller = new ShapesController(this, _model);
+        }
+
+        // 重繪所有形狀(當模型有變更時)
+        public void ReRenderSign()
+        {
+            this.Invalidate(); // 觸發 OnPaint 進行重繪
+        }
+
+        // 使用 OnPaint 來重繪所有的形狀
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            // 清除畫布內容（可選）
+            e.Graphics.Clear(this.BackColor);
+
+            // 繪製所有形狀
+            foreach (var shape in _model.GetShapes())
+            {
+                shape.Draw(e.Graphics);
+            }
+
+            // 向 Controller 請求繪製臨時的形狀
+            _controller.RenderTempShape(e.Graphics);
+        }
+
+        // 獲取當前選中的圖形類型
+        public string GetSelectedShapeType()
+        {
+            if (toolStripButton1.Checked) return "Start";
+            if (toolStripButton2.Checked) return "Terminator";
+            if (toolStripButton3.Checked) return "Process";
+            if (toolStripButton4.Checked) return "Decision";
+            return string.Empty;
+        }
+
+        // 判斷是否處於繪畫模式（工具列有按鈕被選中，並且當前游標為十字）
+        public bool IsDrawingMode()
+        {
+            // 判斷當前游標是否是十字形
+            bool isCursorCross = this.Cursor == Cursors.Cross;
+
+            // 判斷是否有工具列的按鈕被選中
+            bool isAnyButtonChecked = toolStripButton1.Checked || toolStripButton2.Checked || toolStripButton3.Checked || toolStripButton4.Checked;
+
+            // 只有游標為十字形且有按鈕被選中時，才處於繪畫模式
+            return isCursorCross && isAnyButtonChecked;
         }
 
         // 當滑鼠進入控件時，恢復預設游標
@@ -29,6 +82,10 @@ namespace 視窗流程圖
             if (toolStripButton1.Checked || toolStripButton2.Checked || toolStripButton3.Checked || toolStripButton4.Checked)
             {
                 Cursor = Cursors.Cross;
+            }
+            else
+            {
+                Cursor = Cursors.Default;
             }
         }
 
@@ -82,11 +139,19 @@ namespace 視窗流程圖
         // 從指定行獲取 ID
         public int GetIdFromRow(int rowIndex)
         {
-            return Convert.ToInt32(ShapeDataGridView.Rows[rowIndex].Cells["ID"].Value);
+            if (int.TryParse(ShapeDataGridView.Rows[rowIndex].Cells["ID"].Value?.ToString(), out int id))
+            {
+                return id;
+            }
+            else
+            {
+                ShowError("ID 格式無效");
+                return -1; // 或者任何適合的錯誤值
+            }
         }
 
         // 重置所有 Toolbar 按鈕的 Checked 屬性為 false
-        private void ResetToolbarCheckedState()
+        public void ResetToolbarCheckedState()
         {
             toolStripButton1.Checked = false; // Start 對應的按鈕
             toolStripButton2.Checked = false; // Terminator 對應的按鈕
@@ -94,7 +159,7 @@ namespace 視窗流程圖
             toolStripButton4.Checked = false; // Decision 對應的按鈕
         }
 
-        // 當按下 Start 按鈕時
+        // 當按下形狀按鈕時
         private void StartToolStripButtonClick(object sender, EventArgs e)
         {
             if (toolStripButton1.Checked)
@@ -146,25 +211,6 @@ namespace 視窗流程圖
             {
                 ResetToolbarCheckedState(); // 重置其他按鈕
                 toolStripButton4.Checked = true; // 選中當前按鈕
-            }
-        }
-
-        // 當滑鼠進入窗體且不在已知UI控件上時，將游標設為十字形
-        // 繪畫區的邊界，根據你提供的數值
-        private void FormMouseMove(object sender, MouseEventArgs e)
-        {
-            // 檢查滑鼠當前位置是否在任何控件上
-            Control hoveredControl = GetChildAtPoint(e.Location);
-
-            // 如果滑鼠不在任何控件上，並且工具列按鈕有一個是選中的，那麼改為十字光標
-            if (hoveredControl == null &&
-                (toolStripButton1.Checked || toolStripButton2.Checked || toolStripButton3.Checked || toolStripButton4.Checked))
-            {
-                Cursor = Cursors.Cross; // 沒有碰到控件，認為進入繪畫區，游標變成十字
-            }
-            else
-            {
-                Cursor = Cursors.Default; // 碰到控件，恢復預設的游標
             }
         }
     }

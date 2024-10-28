@@ -498,8 +498,20 @@ namespace 視窗流程圖
 
             說明ToolStripMenuItem.MouseEnter += new EventHandler(ControlMouseEnter);
             說明ToolStripMenuItem.MouseLeave += new EventHandler(ControlMouseLeave);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.FormMouseMove);
 
+            ShapeSelectToolStrip.MouseEnter += new EventHandler(ControlMouseEnter);
+            ShapeSelectToolStrip.MouseLeave += new EventHandler(ControlMouseLeave);
+
+            menuStrip1.MouseEnter += new EventHandler(ControlMouseEnter);
+            menuStrip1.MouseLeave += new EventHandler(ControlMouseLeave);
+
+            關於ToolStripMenuItem.MouseEnter += new EventHandler(ControlMouseEnter);
+            關於ToolStripMenuItem.MouseLeave += new EventHandler(ControlMouseLeave);
+
+            // 綁定滑鼠事件
+            this.MouseDown += (sender, e) => _controller.HandleMouseDown(e);
+            this.MouseUp += (sender, e) => _controller.HandleMouseUp(e);
+            this.MouseMove += (sender, e) => _controller.HandleMouseMove(e);
         }
 
         #endregion

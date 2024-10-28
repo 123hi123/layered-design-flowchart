@@ -1,9 +1,23 @@
-﻿using 視窗流程圖.Models;
+﻿using System.Drawing;
+using 視窗流程圖.Models;
 
 namespace 視窗流程圖.Shapes
 {
     public class Process : Shape
     {
-        // 這裡可以添加 Process 特有的屬性或方法
+        // 繪製 Process 矩形
+        public override void Draw(Graphics g)
+        {
+            using (Pen pen = new Pen(Color.Black, 2))
+            {
+                g.DrawRectangle(pen, X, Y, Width, Height);
+
+                // 在矩形內部繪製文字
+                using (Font font = new Font("Arial", 7))
+                {
+                    g.DrawString(ShapeName, font, Brushes.Black, X + Width / 2 - 10, Y + Height / 2 - 10);
+                }
+            }
+        }
     }
 }

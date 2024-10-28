@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using 視窗流程圖.Models;
 
@@ -9,14 +10,74 @@ namespace 視窗流程圖.Controllers
     {
         private readonly ShapesModel _model;
         private readonly Form1 _view;
+        private Point? _startPoint; // 用於記錄起始點
+        private Point? _currentPoint;   // 用於記錄當前滑鼠位置
+        private bool _isDrawing = false; // 用於記錄是否正在繪製
 
-        public ShapesController(Form1 view)
+        public ShapesController(Form1 view, ShapesModel model)
         {
             this._view = view;
-            this._model = new ShapesModel();
+            this._model = model;  // 使用外部傳入的 Model，而不是創建新的
         }
 
-        // 添加形狀的方法
+        // 處理滑鼠是否正在繪畫？(沒有問題了)
+        public void HandleMouseDown(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && _view.IsDrawingMode())
+            {
+                _startPoint = e.Location; // 記錄起始點
+                _currentPoint = e.Location; // 初始當前點設為起始點
+                _isDrawing = true;          // 標記正在繪製
+            }
+        }
+
+        public void HandleMouseMove(MouseEventArgs e)
+        {
+            if (_isDrawing)
+            {
+                // 更新當前滑鼠位置
+                _currentPoint = e.Location;
+
+                // 觸發 View 重繪
+                _view.Invalidate();
+            }
+        }
+
+        // 處理滑鼠是否繪畫完成？
+        public void HandleMouseUp(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && _isDrawing)
+            {
+                _isDrawing = false;
+                Point endPoint = e.Location; // 獲取終點
+                
+                // 通過模型計算圖形數據
+                ShapeData shapeData = _model.CalculateShapeData(_startPoint.Value, endPoint, _view.GetSelectedShapeType());
+                int id = _model.AddShape(shapeData);
+
+                _view.AddShapeToGrid(id, shapeData);
+
+                // 重置狀態
+                _startPoint = null;
+                _view.Cursor = Cursors.Default;
+                _view.ResetToolbarCheckedState(); // 重置工具列狀態
+            }
+        }
+
+        public void RenderTempShape(Graphics g)
+        {
+            if (_isDrawing && _startPoint.HasValue && _currentPoint.HasValue)
+            {
+                // 計算臨時形狀數據
+                ShapeData tempShapeData = _model.CalculateShapeData(_startPoint.Value, _currentPoint.Value, _view.GetSelectedShapeType());
+
+                // 創建臨時形狀並進行繪製
+                Shape tempShape = Factories.ShapeFactory.CreateShape(tempShapeData);
+                tempShape?.Draw(g); // 繪製臨時形狀
+            }
+        }
+
+        // 添加輸入形狀的方法
         public void InputShape(ShapeData shapeData)
         {
             if (_model.Valid(shapeData))

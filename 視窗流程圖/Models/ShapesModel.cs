@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace 視窗流程圖.Models
     {
         private Dictionary<int, Shape> _shapes = new Dictionary<int, Shape>();
         private int _nextId = 0; // 用于生成唯一的 ID
+        public event Action ReRenderSign;
 
         public bool Valid(ShapeData shapeData)
         {
@@ -31,17 +33,55 @@ namespace 視窗流程圖.Models
             return true;
         }
 
-        public int AddShape(ShapeData shapeData)
+        // 計算圖形的大小和位置
+        public ShapeData CalculateShapeData(Point startPoint, Point endPoint, string shapeType)
+        {
+            int x = Math.Min(startPoint.X, endPoint.X);
+            int y = Math.Min(startPoint.Y, endPoint.Y);
+            int width = Math.Abs(endPoint.X - startPoint.X);
+            int height = Math.Abs(endPoint.Y - startPoint.Y);
+
+            // 隨機生成文字
+            string randomText = GenerateRandomText();
+
+            return new ShapeData
+            {
+                ShapeType = shapeType, 
+                ShapeName = randomText,
+                X = x.ToString(),
+                Y = y.ToString(),
+                Width = width.ToString(),
+                Height = height.ToString()
+            };
+        }
+
+        public int AddShape(ShapeData shapeData) // 觸發重新繪制
         {
             Shape shape = Factories.ShapeFactory.CreateShape(shapeData);
             int id = _nextId++;
             _shapes.Add(id, shape);
-            return id; // 返回新添加形状的 ID
+            ReRenderSign(); // 觸發事件，通知視圖更新
+            return id;
         }
 
-        public void RemoveShape(int id)
+        public void RemoveShape(int id) // 觸發重新繪制
         {
             _shapes.Remove(id);
+            ReRenderSign(); // 觸發事件，通知視圖更新
+        }
+
+        // 隨機生成文字
+        private string GenerateRandomText()
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            int length = random.Next(3, 11); // 生成3-10個字符的隨機字符串
+            char[] result = new char[length];
+            for (int i = 0; i < length; i++)
+            {
+                result[i] = chars[random.Next(chars.Length)];
+            }
+            return new string(result);
         }
 
         public List<Shape> GetShapes()
