@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using 視窗流程圖.Adapter;
 
 namespace 視窗流程圖.Models
 {
@@ -15,7 +11,7 @@ namespace 視窗流程圖.Models
         public int Width { get; set; }
         public int Height { get; set; }
 
-        // 抽象繪製方法，具體的子類會實現這個方法
-        public abstract void Draw(Graphics g);
+        // 抽象繪製方法，具體的子類會實現這個方法，改用 IGraphics
+        public abstract void Draw(IGraphics g);
     }
 }

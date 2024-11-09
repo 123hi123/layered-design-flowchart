@@ -1,31 +1,32 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
 using 視窗流程圖.Models;
+using 視窗流程圖.Adapter;
 
 namespace 視窗流程圖.Shapes
 {
     public class Decision : Shape
     {
-        // 實現 Decision 的繪製邏輯
-        public override void Draw(Graphics g)
+        // 繪製 Decision 的菱形
+        public override void Draw(IGraphics g)
         {
-            using (Pen pen = new Pen(Color.Black, 2))
+            if (Width <= 0 || Height <= 0)
             {
-                // 定義菱形的四個點
-                Point[] points = new Point[4];
-                points[0] = new Point(X + Width / 2, Y); // 頂點
-                points[1] = new Point(X + Width, Y + Height / 2); // 右點
-                points[2] = new Point(X + Width / 2, Y + Height); // 底點
-                points[3] = new Point(X, Y + Height / 2); // 左點
-
-                // 繪製菱形
-                g.DrawPolygon(pen, points);
-
-                // 在菱形內部繪製文字（可選）
-                using (Font font = new Font("Arial", 7))
-                {
-                    g.DrawString(ShapeName, font, Brushes.Black, X + Width / 2 - 10, Y + Height / 2 - 10);
-                }
+                // 避免無效的繪製操作
+                return;
             }
+
+            // 定義菱形的四個點，使用 Point2D 結構
+            List<Point2D> points = new List<Point2D>();
+            points.Add(new Point2D(X + Width / 2f, Y));               // 頂點
+            points.Add(new Point2D(X + Width, Y + Height / 2f));      // 右邊
+            points.Add(new Point2D(X + Width / 2f, Y + Height));      // 底邊
+            points.Add(new Point2D(X, Y + Height / 2f));              // 左邊
+
+            // 使用 DrawPolygon 繪製菱形
+            g.DrawPolygon(points);
+
+            // 在菱形內部繪製文字
+            g.DrawString(ShapeName, X + Width / 2 - 10, Y + Height / 2 - 10);
         }
     }
 }

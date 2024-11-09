@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using 視窗流程圖.Models;
+using 視窗流程圖.Adapter;  // 引入 Adapter 命名空間
 
 namespace 視窗流程圖.Controllers
 {
@@ -10,8 +10,8 @@ namespace 視窗流程圖.Controllers
     {
         private readonly ShapesModel _model;
         private readonly Form1 _view;
-        private Point? _startPoint; // 用於記錄起始點
-        private Point? _currentPoint;   // 用於記錄當前滑鼠位置
+        private Point2D? _startPoint; // 用於記錄起始點 (改為 Point2D)
+        private Point2D? _currentPoint;   // 用於記錄當前滑鼠位置
         private bool _isDrawing = false; // 用於記錄是否正在繪製
 
         public ShapesController(Form1 view, ShapesModel model)
@@ -25,8 +25,9 @@ namespace 視窗流程圖.Controllers
         {
             if (e.Button == MouseButtons.Left && _view.IsDrawingMode())
             {
-                _startPoint = e.Location; // 記錄起始點
-                _currentPoint = e.Location; // 初始當前點設為起始點
+                // 將 System.Drawing.Point 轉換為 Point2D
+                _startPoint = new Point2D(e.Location.X, e.Location.Y);
+                _currentPoint = new Point2D(e.Location.X, e.Location.Y); // 初始當前點設為起始點
                 _isDrawing = true;          // 標記正在繪製
             }
         }
@@ -36,10 +37,10 @@ namespace 視窗流程圖.Controllers
             if (_isDrawing)
             {
                 // 更新當前滑鼠位置
-                _currentPoint = e.Location;
+                _currentPoint = new Point2D(e.Location.X, e.Location.Y);
 
                 // 觸發 View 重繪
-                _view.Invalidate();
+                _view.Invalidate();  // 這裡會重新執行 OnPaint，進而調用我們的 RenderTempShape
             }
         }
 
@@ -49,8 +50,8 @@ namespace 視窗流程圖.Controllers
             if (e.Button == MouseButtons.Left && _isDrawing)
             {
                 _isDrawing = false;
-                Point endPoint = e.Location; // 獲取終點
-                
+                Point2D endPoint = new Point2D(e.Location.X, e.Location.Y);
+
                 // 通過模型計算圖形數據
                 ShapeData shapeData = _model.CalculateShapeData(_startPoint.Value, endPoint, _view.GetSelectedShapeType());
                 int id = _model.AddShape(shapeData);
@@ -64,7 +65,8 @@ namespace 視窗流程圖.Controllers
             }
         }
 
-        public void RenderTempShape(Graphics g)
+        // 使用 IGraphics 處理臨時形狀的繪製
+        public void RenderTempShape(IGraphics g)
         {
             if (_isDrawing && _startPoint.HasValue && _currentPoint.HasValue)
             {
@@ -73,7 +75,7 @@ namespace 視窗流程圖.Controllers
 
                 // 創建臨時形狀並進行繪製
                 Shape tempShape = Factories.ShapeFactory.CreateShape(tempShapeData);
-                tempShape?.Draw(g); // 繪製臨時形狀
+                tempShape?.Draw(g); // 使用 IGraphics 進行繪製
             }
         }
 

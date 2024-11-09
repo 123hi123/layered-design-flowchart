@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using 視窗流程圖.Adapter;
 
 namespace 視窗流程圖.Models
 {
@@ -34,19 +34,19 @@ namespace 視窗流程圖.Models
         }
 
         // 計算圖形的大小和位置
-        public ShapeData CalculateShapeData(Point startPoint, Point endPoint, string shapeType)
+        public ShapeData CalculateShapeData(Point2D startPoint, Point2D endPoint, string shapeType)
         {
-            int x = Math.Min(startPoint.X, endPoint.X);
-            int y = Math.Min(startPoint.Y, endPoint.Y);
-            int width = Math.Abs(endPoint.X - startPoint.X);
-            int height = Math.Abs(endPoint.Y - startPoint.Y);
+            float x = Math.Min(startPoint.X, endPoint.X);  // 計算左上角 X
+            float y = Math.Min(startPoint.Y, endPoint.Y);  // 計算左上角 Y
+            float width = Math.Abs(endPoint.X - startPoint.X);  // 計算寬度
+            float height = Math.Abs(endPoint.Y - startPoint.Y); // 計算高度
 
             // 隨機生成文字
             string randomText = GenerateRandomText();
 
             return new ShapeData
             {
-                ShapeType = shapeType, 
+                ShapeType = shapeType,
                 ShapeName = randomText,
                 X = x.ToString(),
                 Y = y.ToString(),

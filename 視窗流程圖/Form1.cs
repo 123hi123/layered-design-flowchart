@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using 視窗流程圖.Controllers;
 using 視窗流程圖.Models;
+using 視窗流程圖.Adapter;  // 引入 Adapter 命名空間
 
 namespace 視窗流程圖
 {
@@ -33,17 +34,20 @@ namespace 視窗流程圖
         {
             base.OnPaint(e);
 
+            // 使用 GraphicsAdapter 將 System.Drawing.Graphics 適配為 IGraphics
+            var adapter = new GraphicsAdapter(e.Graphics);
+
             // 清除畫布內容（可選）
             e.Graphics.Clear(this.BackColor);
 
             // 繪製所有形狀
             foreach (var shape in _model.GetShapes())
             {
-                shape.Draw(e.Graphics);
+                shape.Draw(adapter);  // 使用 IGraphics 進行繪製
             }
 
             // 向 Controller 請求繪製臨時的形狀
-            _controller.RenderTempShape(e.Graphics);
+            _controller.RenderTempShape(adapter);  // 使用 IGraphics 進行繪製
         }
 
         // 獲取當前選中的圖形類型
