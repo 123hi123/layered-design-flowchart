@@ -475,6 +475,7 @@ namespace 視窗流程圖
             this.toolStripButton5.Name = "toolStripButton5";
             this.toolStripButton5.Size = new System.Drawing.Size(29, 24);
             this.toolStripButton5.Text = "toolStripButton5";
+            this.toolStripButton5.Click += new System.EventHandler(this.SelectToolStripButtonClick);
             // 
             // Form1
             // 
