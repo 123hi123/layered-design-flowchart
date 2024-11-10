@@ -8,6 +8,7 @@ namespace 視窗流程圖.Controllers
 {
     public class ShapesController
     {
+
         private readonly ShapesModel _model;
         private readonly Form1 _view;
         private Point2D? _startPoint; // 用於記錄起始點 (改為 Point2D)

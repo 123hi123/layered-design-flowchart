@@ -13,14 +13,19 @@ namespace 視窗流程圖
     {
         private ShapesController _controller;
         private ShapesModel _model;
-
+        // 綁定滑鼠事件
+        
         public Form1()
         {
             InitializeComponent();
             _model = new ShapesModel();
+            this.MouseDown += (sender, e) => _controller.HandleMouseDown(e);
+            this.MouseUp += (sender, e) => _controller.HandleMouseUp(e);
+            this.MouseMove += (sender, e) => _controller.HandleMouseMove(e);
             _model.ReRenderSign += ReRenderSign; // 綁定模型的 ShapeAdded 
             this.DoubleBuffered = true;
             _controller = new ShapesController(this, _model);
+            
         }
 
         // 重繪所有形狀(當模型有變更時)
