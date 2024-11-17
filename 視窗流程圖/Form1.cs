@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using 視窗流程圖.Controllers;
 using 視窗流程圖.Models;
 using 視窗流程圖.Adapter;  // 引入 Adapter 命名空間
+using 視窗流程圖.States;
 
 namespace 視窗流程圖
 {
@@ -13,19 +14,70 @@ namespace 視窗流程圖
     {
         private ShapesController _controller;
         private ShapesModel _model;
-        // 綁定滑鼠事件
-        
+        private ShapeSelectViewModel _shapeSelectViewModel;
+        private ShapeInputViewModel _shapeInputViewModel;
+        private IState _currentState;
         public Form1()
         {
             InitializeComponent();
             _model = new ShapesModel();
+            _controller = new ShapesController(this, _model, _currentState);// 共用model
+            _shapeSelectViewModel = new ShapeSelectViewModel();
+            _shapeInputViewModel = new ShapeInputViewModel();
+            _currentState = new NormalState();
+
             this.MouseDown += (sender, e) => _controller.HandleMouseDown(e);
             this.MouseUp += (sender, e) => _controller.HandleMouseUp(e);
             this.MouseMove += (sender, e) => _controller.HandleMouseMove(e);
             _model.ReRenderSign += ReRenderSign; // 綁定模型的 ShapeAdded 
             this.DoubleBuffered = true;
-            _controller = new ShapesController(this, _model);
-            
+            // 訂閱 ShapeTypeChanged 事件
+            _shapeSelectViewModel.ShapeTypeChanged += ShapeTypeChanged;
+            _shapeSelectViewModel.DrawStateIn += DrawStateIn;
+            _shapeSelectViewModel.NormalStateIn += NormalStateIn;
+
+            // 綁定 ToolStrip 按鈕的點擊事件
+            toolStripButton1.Click += (sender, e) => _shapeSelectViewModel.SelectShape(ShapeSelectViewModel.ShapeType.Start);
+            toolStripButton2.Click += (sender, e) => _shapeSelectViewModel.SelectShape(ShapeSelectViewModel.ShapeType.Terminator);
+            toolStripButton3.Click += (sender, e) => _shapeSelectViewModel.SelectShape(ShapeSelectViewModel.ShapeType.Process);
+            toolStripButton4.Click += (sender, e) => _shapeSelectViewModel.SelectShape(ShapeSelectViewModel.ShapeType.Decision);
+            toolStripButton5.Click += (sender, e) => _shapeSelectViewModel.SelectShape(ShapeSelectViewModel.ShapeType.Select);
+            comboBox_shape.SelectedIndexChanged += (s, e) => _shapeInputViewModel.UpdateProperty(nameof(_shapeInputViewModel.ShapeType), comboBox_shape.SelectedItem.ToString());
+            textBox_Text.TextChanged += (s, e) => _shapeInputViewModel.UpdateProperty(nameof(_shapeInputViewModel.ShapeName), textBox_Text.Text);
+            textBox_X.TextChanged += (s, e) => _shapeInputViewModel.UpdateProperty(nameof(_shapeInputViewModel.X), textBox_X.Text);
+            textBox_Y.TextChanged += (s, e) => _shapeInputViewModel.UpdateProperty(nameof(_shapeInputViewModel.Y), textBox_Y.Text);
+            textBox_Width.TextChanged += (s, e) => _shapeInputViewModel.UpdateProperty(nameof(_shapeInputViewModel.Width), textBox_Width.Text);
+            textBox_Height.TextChanged += (s, e) => _shapeInputViewModel.UpdateProperty(nameof(_shapeInputViewModel.Height), textBox_Height.Text);
+            AddNewShapeButton.DataBindings.Add("Enabled", _shapeInputViewModel, "IsValid");
+            UpdateToolStrip();
+        }
+
+        public void NormalStateIn(object sender, EventArgs e)
+        {
+            _currentState = new NormalState();
+        }
+
+        public void DrawStateIn(object sender, EventArgs e)
+        {
+            _currentState = new DrawingState();
+        }
+
+        public void IntoSelectMode()
+        {
+            _shapeSelectViewModel.SelectShape(ShapeSelectViewModel.ShapeType.Select);
+        }
+        private void ShapeTypeChanged(object sender, EventArgs e)
+        {
+            UpdateToolStrip();
+        }
+
+        private void UpdateToolStrip()
+        {
+            toolStripButton1.Checked = _shapeSelectViewModel.SelectedShapeType == ShapeSelectViewModel.ShapeType.Start;
+            toolStripButton2.Checked = _shapeSelectViewModel.SelectedShapeType == ShapeSelectViewModel.ShapeType.Terminator;
+            toolStripButton3.Checked = _shapeSelectViewModel.SelectedShapeType == ShapeSelectViewModel.ShapeType.Process;
+            toolStripButton4.Checked = _shapeSelectViewModel.SelectedShapeType == ShapeSelectViewModel.ShapeType.Decision;
+            toolStripButton5.Checked = _shapeSelectViewModel.SelectedShapeType == ShapeSelectViewModel.ShapeType.Select;
         }
 
         // 重繪所有形狀(當模型有變更時)
@@ -58,11 +110,7 @@ namespace 視窗流程圖
         // 獲取當前選中的圖形類型
         public string GetSelectedShapeType()
         {
-            if (toolStripButton1.Checked) return "Start";
-            if (toolStripButton2.Checked) return "Terminator";
-            if (toolStripButton3.Checked) return "Process";
-            if (toolStripButton4.Checked) return "Decision";
-            return string.Empty;
+            return _shapeSelectViewModel.SelectedShapeType.ToString();
         }
 
         // 判斷是否處於繪畫模式（工具列有按鈕被選中，並且當前游標為十字）
@@ -72,10 +120,10 @@ namespace 視窗流程圖
             bool isCursorCross = this.Cursor == Cursors.Cross;
 
             // 判斷是否有工具列的按鈕被選中
-            bool isAnyButtonChecked = toolStripButton1.Checked || toolStripButton2.Checked || toolStripButton3.Checked || toolStripButton4.Checked;
+            bool isDrawingShapeSelected = _shapeSelectViewModel.SelectedShapeType != ShapeSelectViewModel.ShapeType.Select;
 
             // 只有游標為十字形且有按鈕被選中時，才處於繪畫模式
-            return isCursorCross && isAnyButtonChecked;
+            return isCursorCross && isDrawingShapeSelected;
         }
 
         // 當滑鼠進入控件時，恢復預設游標
@@ -87,8 +135,8 @@ namespace 視窗流程圖
         // 當滑鼠離開控件時，檢查是否應該變成十字光標
         private void ControlMouseLeave(object sender, EventArgs e)
         {
-            // 檢查當前滑鼠是否在繪畫區，以及是否有工具列按鈕被選中
-            if (toolStripButton1.Checked || toolStripButton2.Checked || toolStripButton3.Checked || toolStripButton4.Checked)
+            // 檢查當前滑鼠是否在繪畫區，以及是否有工具列按鈕被選中 -> 判斷當前的狀態
+            if (_shapeSelectViewModel.SelectedShapeType != ShapeSelectViewModel.ShapeType.Select)
             {
                 Cursor = Cursors.Cross;
             }
@@ -101,17 +149,7 @@ namespace 視窗流程圖
         // 調用 Controller 的 AddShape 方法
         private void AddNewShapeButtomClick(object sender, EventArgs e)
         {
-            ShapeData shapeData = new ShapeData
-            {
-                ShapeType = comboBox_shape.SelectedItem?.ToString() ?? "",
-                ShapeName = textBox_Text.Text,
-                X = textBox_X.Text,
-                Y = textBox_Y.Text,
-                Width = textBox_Width.Text,
-                Height = textBox_Height.Text
-            };
-
-            _controller.InputShape(shapeData);
+            _controller.InputShape(_shapeInputViewModel.GetShapeData());
         }
 
         // DataGridView 刪除按鈕點擊事件處理，調用 Controller 的 DeleteShape 方法
@@ -139,12 +177,6 @@ namespace 視窗流程圖
             }
         }
 
-        // Controller 用於顯示錯誤訊息的方法
-        public void ShowError(string message)
-        {
-            MessageBox.Show(message, "錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        }
-
         // 從指定行獲取 ID
         public int GetIdFromRow(int rowIndex)
         {
@@ -154,78 +186,8 @@ namespace 視窗流程圖
             }
             else
             {
-                ShowError("ID 格式無效");
                 return -1; // 或者任何適合的錯誤值
             }
-        }
-
-        // 重置所有 Toolbar 按鈕的 Checked 屬性為 false
-        public void ResetToolbarCheckedState()
-        {
-            toolStripButton1.Checked = false; // Start 對應的按鈕
-            toolStripButton2.Checked = false; // Terminator 對應的按鈕
-            toolStripButton3.Checked = false; // Process 對應的按鈕
-            toolStripButton4.Checked = false; // Decision 對應的按鈕
-        }
-
-        // 當按下形狀按鈕時
-        private void StartToolStripButtonClick(object sender, EventArgs e)
-        {
-            if (toolStripButton1.Checked)
-            {
-                // 如果按鈕已經選中，點擊後取消所有按鈕的選中狀態
-                ResetToolbarCheckedState();
-            }
-            else
-            {
-                // 如果按鈕未被選中，重置其他按鈕，並選中當前按鈕
-                ResetToolbarCheckedState();
-                toolStripButton1.Checked = true;
-            }
-        }
-
-        private void TerminatorToolStripButtonClick(object sender, EventArgs e)
-        {
-            if (toolStripButton2.Checked)
-            {
-                ResetToolbarCheckedState(); // 如果按鈕已經被選中，點擊後取消所有按鈕的選中狀態
-            }
-            else
-            {
-                ResetToolbarCheckedState(); // 重置其他按鈕
-                toolStripButton2.Checked = true; // 選中當前按鈕
-            }
-        }
-
-        private void ProcessToolStripButtonClick(object sender, EventArgs e)
-        {
-            if (toolStripButton3.Checked)
-            {
-                ResetToolbarCheckedState(); // 如果按鈕已經被選中，點擊後取消所有按鈕的選中狀態
-            }
-            else
-            {
-                ResetToolbarCheckedState(); // 重置其他按鈕
-                toolStripButton3.Checked = true; // 選中當前按鈕
-            }
-        }
-
-        private void DecisionToolStripButtonClick(object sender, EventArgs e)
-        {
-            if (toolStripButton4.Checked)
-            {
-                ResetToolbarCheckedState(); // 如果按鈕已經被選中，點擊後取消所有按鈕的選中狀態
-            }
-            else
-            {
-                ResetToolbarCheckedState(); // 重置其他按鈕
-                toolStripButton4.Checked = true; // 選中當前按鈕
-            }
-        }
-
-        private void SelectToolStripButtonClick(object sender, EventArgs e)
-        {
-            
-        }
+        } 
     }
 }

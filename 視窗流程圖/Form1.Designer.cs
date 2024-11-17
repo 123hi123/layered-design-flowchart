@@ -43,7 +43,7 @@ namespace 視窗流程圖
             this.textBox_X = new System.Windows.Forms.TextBox();
             this.textBox_Text = new System.Windows.Forms.TextBox();
             this.comboBox_shape = new System.Windows.Forms.ComboBox();
-            this.AddNewShapeButtom = new System.Windows.Forms.Button();
+            this.AddNewShapeButton = new System.Windows.Forms.Button();
             this.ShapeDataGridView = new System.Windows.Forms.DataGridView();
             this.DeleteButton = new System.Windows.Forms.DataGridViewButtonColumn();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -62,8 +62,8 @@ namespace 視窗流程圖
             this.ShapeSelectToolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ShapeDataGridView)).BeginInit();
@@ -85,7 +85,7 @@ namespace 視窗流程圖
             this.groupBox1.Controls.Add(this.textBox_X);
             this.groupBox1.Controls.Add(this.textBox_Text);
             this.groupBox1.Controls.Add(this.comboBox_shape);
-            this.groupBox1.Controls.Add(this.AddNewShapeButtom);
+            this.groupBox1.Controls.Add(this.AddNewShapeButton);
             this.groupBox1.Controls.Add(this.ShapeDataGridView);
             this.groupBox1.Font = new System.Drawing.Font("新細明體", 9F);
             this.groupBox1.Location = new System.Drawing.Point(954, 86);
@@ -223,19 +223,19 @@ namespace 視窗流程圖
             this.comboBox_shape.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
             this.comboBox_shape.MouseLeave += new System.EventHandler(this.ControlMouseLeave);
             // 
-            // AddNewShapeButtom
+            // AddNewShapeButton
             // 
-            this.AddNewShapeButtom.AutoEllipsis = true;
-            this.AddNewShapeButtom.Location = new System.Drawing.Point(5, 20);
-            this.AddNewShapeButtom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.AddNewShapeButtom.Name = "AddNewShapeButtom";
-            this.AddNewShapeButtom.Size = new System.Drawing.Size(75, 62);
-            this.AddNewShapeButtom.TabIndex = 1;
-            this.AddNewShapeButtom.Text = "新增";
-            this.AddNewShapeButtom.UseVisualStyleBackColor = true;
-            this.AddNewShapeButtom.Click += new System.EventHandler(this.AddNewShapeButtomClick);
-            this.AddNewShapeButtom.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
-            this.AddNewShapeButtom.MouseLeave += new System.EventHandler(this.ControlMouseLeave);
+            this.AddNewShapeButton.AutoEllipsis = true;
+            this.AddNewShapeButton.Location = new System.Drawing.Point(5, 20);
+            this.AddNewShapeButton.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.AddNewShapeButton.Name = "AddNewShapeButton";
+            this.AddNewShapeButton.Size = new System.Drawing.Size(75, 62);
+            this.AddNewShapeButton.TabIndex = 1;
+            this.AddNewShapeButton.Text = "新增";
+            this.AddNewShapeButton.UseVisualStyleBackColor = true;
+            this.AddNewShapeButton.Click += new System.EventHandler(this.AddNewShapeButtomClick);
+            this.AddNewShapeButton.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
+            this.AddNewShapeButton.MouseLeave += new System.EventHandler(this.ControlMouseLeave);
             // 
             // ShapeDataGridView
             // 
@@ -389,7 +389,7 @@ namespace 視窗流程圖
             this.說明ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.關於ToolStripMenuItem});
             this.說明ToolStripMenuItem.Name = "說明ToolStripMenuItem";
-            this.說明ToolStripMenuItem.Size = new System.Drawing.Size(53, 26);
+            this.說明ToolStripMenuItem.Size = new System.Drawing.Size(53, 23);
             this.說明ToolStripMenuItem.Text = "說明";
             this.說明ToolStripMenuItem.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
             this.說明ToolStripMenuItem.MouseLeave += new System.EventHandler(this.ControlMouseLeave);
@@ -427,7 +427,6 @@ namespace 視窗流程圖
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(29, 24);
             this.toolStripButton1.Text = "StartToolStripButton";
-            this.toolStripButton1.Click += new System.EventHandler(this.StartToolStripButtonClick);
             this.toolStripButton1.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
             this.toolStripButton1.MouseLeave += new System.EventHandler(this.ControlMouseLeave);
             // 
@@ -439,21 +438,8 @@ namespace 視窗流程圖
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(29, 24);
             this.toolStripButton2.Text = "TerminatorToolStripButton";
-            this.toolStripButton2.Click += new System.EventHandler(this.TerminatorToolStripButtonClick);
             this.toolStripButton2.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
             this.toolStripButton2.MouseLeave += new System.EventHandler(this.ControlMouseLeave);
-            // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(29, 24);
-            this.toolStripButton3.Text = "ProcessToolStripButton";
-            this.toolStripButton3.Click += new System.EventHandler(this.ProcessToolStripButtonClick);
-            this.toolStripButton3.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
-            this.toolStripButton3.MouseLeave += new System.EventHandler(this.ControlMouseLeave);
             // 
             // toolStripButton4
             // 
@@ -463,9 +449,19 @@ namespace 視窗流程圖
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(29, 24);
             this.toolStripButton4.Text = "DecisionToolStripButton";
-            this.toolStripButton4.Click += new System.EventHandler(this.DecisionToolStripButtonClick);
             this.toolStripButton4.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
             this.toolStripButton4.MouseLeave += new System.EventHandler(this.ControlMouseLeave);
+            // 
+            // toolStripButton3
+            // 
+            this.toolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
+            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton3.Name = "toolStripButton3";
+            this.toolStripButton3.Size = new System.Drawing.Size(29, 24);
+            this.toolStripButton3.Text = "ProcessToolStripButton";
+            this.toolStripButton3.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
+            this.toolStripButton3.MouseLeave += new System.EventHandler(this.ControlMouseLeave);
             // 
             // toolStripButton5
             // 
@@ -475,7 +471,6 @@ namespace 視窗流程圖
             this.toolStripButton5.Name = "toolStripButton5";
             this.toolStripButton5.Size = new System.Drawing.Size(29, 24);
             this.toolStripButton5.Text = "toolStripButton5";
-            this.toolStripButton5.Click += new System.EventHandler(this.SelectToolStripButtonClick);
             // 
             // Form1
             // 
@@ -519,7 +514,7 @@ namespace 視窗流程圖
         private System.Windows.Forms.TextBox textBox_X;
         private System.Windows.Forms.TextBox textBox_Text;
         private System.Windows.Forms.ComboBox comboBox_shape;
-        private System.Windows.Forms.Button AddNewShapeButtom;
+        private System.Windows.Forms.Button AddNewShapeButton;
         private System.Windows.Forms.DataGridView ShapeDataGridView;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.Button button1;

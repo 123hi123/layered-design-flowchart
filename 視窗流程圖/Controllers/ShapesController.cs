@@ -3,21 +3,24 @@ using System.Drawing;
 using System.Windows.Forms;
 using 視窗流程圖.Models;
 using 視窗流程圖.Adapter;  // 引入 Adapter 命名空間
+using 視窗流程圖.States;
 
 namespace 視窗流程圖.Controllers
 {
     public class ShapesController
     {
         private readonly ShapesModel _model;
+        private readonly IState _currentState;
         private readonly Form1 _view;
         private Point2D? _startPoint; // 用於記錄起始點 (改為 Point2D)
         private Point2D? _currentPoint;   // 用於記錄當前滑鼠位置
         private bool _isDrawing = false; // 用於記錄是否正在繪製
 
-        public ShapesController(Form1 view, ShapesModel model)
+        public ShapesController(Form1 view, ShapesModel model, IState state)
         {
             this._view = view;
             this._model = model;  // 使用外部傳入的 Model，而不是創建新的
+            this._currentState = state;
         }
 
         // 處理滑鼠是否正在繪畫？(沒有問題了)
@@ -61,14 +64,15 @@ namespace 視窗流程圖.Controllers
                 // 重置狀態
                 _startPoint = null;
                 _view.Cursor = Cursors.Default;
-                _view.ResetToolbarCheckedState(); // 重置工具列狀態
+
+                _view.IntoSelectMode();
             }
         }
 
         // 使用 IGraphics 處理臨時形狀的繪製
         public void RenderTempShape(IGraphics g)
         {
-            if (_isDrawing && _startPoint.HasValue && _currentPoint.HasValue)
+            if (_startPoint.HasValue && _currentPoint.HasValue)
             {
                 // 計算臨時形狀數據
                 ShapeData tempShapeData = _model.CalculateShapeData(_startPoint.Value, _currentPoint.Value, _view.GetSelectedShapeType());
@@ -82,15 +86,8 @@ namespace 視窗流程圖.Controllers
         // 添加輸入形狀的方法
         public void InputShape(ShapeData shapeData)
         {
-            if (_model.Valid(shapeData))
-            {
-                int id = _model.AddShape(shapeData);
-                _view.AddShapeToGrid(id, shapeData);
-            }
-            else
-            {
-                _view.ShowError("輸入數據有誤，請檢查後重試。");
-            }
+            int id = _model.AddShape(shapeData);
+            _view.AddShapeToGrid(id, shapeData);
         }
 
         // 刪除形狀的方法
