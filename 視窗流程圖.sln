@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.11.35303.130
+VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "視窗流程圖", "視窗流程圖\視窗流程圖.csproj", "{679C9C0F-06E1-41C1-B686-38DAFFA07C37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "視窗流程圖", "視窗流程圖.csproj", "{4E06E0F7-409D-431B-8C16-72C947E45F37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{679C9C0F-06E1-41C1-B686-38DAFFA07C37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{679C9C0F-06E1-41C1-B686-38DAFFA07C37}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{679C9C0F-06E1-41C1-B686-38DAFFA07C37}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{679C9C0F-06E1-41C1-B686-38DAFFA07C37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E06E0F7-409D-431B-8C16-72C947E45F37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E06E0F7-409D-431B-8C16-72C947E45F37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E06E0F7-409D-431B-8C16-72C947E45F37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E06E0F7-409D-431B-8C16-72C947E45F37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A90D85E1-5033-460D-AC1C-EC0A5EC2702F}
+		SolutionGuid = {C103C452-214B-4D98-837A-376A0E59BB9F}
 	EndGlobalSection
 EndGlobal
