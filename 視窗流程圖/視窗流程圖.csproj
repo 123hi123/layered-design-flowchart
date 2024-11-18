@@ -49,8 +49,8 @@
     <Compile Include="Adapter\Point2D.cs" />
     <Compile Include="Adapter\GraphicsAdapter.cs" />
     <Compile Include="Adapter\IGraphics.cs" />
-    <Compile Include="ViewModels\ShapeInputViewModel.cs" />
-    <Compile Include="ViewModels\ShapeSelectViewModel.cs" />
+    <Compile Include="PresentationModels\ShapeInputPreModel.cs" />
+    <Compile Include="PresentationModels\ShapeSelectPreModel.cs" />
     <Compile Include="Controllers\ShapesController.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

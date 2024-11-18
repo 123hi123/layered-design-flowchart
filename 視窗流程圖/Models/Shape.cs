@@ -13,5 +13,7 @@ namespace 視窗流程圖.Models
 
         // 抽象繪製方法，具體的子類會實現這個方法，改用 IGraphics
         public abstract void Draw(IGraphics g);
+
+        public abstract bool ContainsPoint(int x, int y);
     }
 }

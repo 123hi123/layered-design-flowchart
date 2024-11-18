@@ -13,5 +13,6 @@ namespace 視窗流程圖.Adapter
 
         // 繪製多邊形，使用 Point2D 數據結構來表示多邊形的頂點
         void DrawPolygon(List<Point2D> points);
+        void DrawSelectionFrame(float x, float y, float width, float height);
     }
 }

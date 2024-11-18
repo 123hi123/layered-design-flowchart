@@ -1,7 +1,8 @@
-﻿namespace 視窗流程圖.Adapter
+﻿using System;
+
+namespace 視窗流程圖.Adapter
 {
-    // 定義一個二維點結構，用於模型層和 IGraphics 的內部使用
-    public struct Point2D
+    public struct Point2D : IEquatable<Point2D>
     {
         public float X { get; }
         public float Y { get; }
@@ -10,6 +11,32 @@
         {
             X = x;
             Y = y;
+        }
+
+        // 重寫 Equals 方法
+        public override bool Equals(object obj)
+        {
+            return obj is Point2D other && Equals(other);
+        }
+
+        // IEquatable<Point2D> 的實現
+        public bool Equals(Point2D other)
+        {
+            return X == other.X || Y == other.Y;
+        }
+
+
+
+        // 定義 == 運算符
+        public static bool operator ==(Point2D left, Point2D right)
+        {
+            return left.Equals(right);
+        }
+
+        // 定義 != 運算符
+        public static bool operator !=(Point2D left, Point2D right)
+        {
+            return !(left == right);
         }
     }
 }

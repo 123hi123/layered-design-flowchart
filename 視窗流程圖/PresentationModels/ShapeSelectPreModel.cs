@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace 視窗流程圖
 {
-    public class ShapeSelectViewModel
+    public class ShapeSelectPreModel
     {
         public enum ShapeType
         {

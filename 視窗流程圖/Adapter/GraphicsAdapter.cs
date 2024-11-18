@@ -7,6 +7,41 @@ namespace 視窗流程圖.Adapter
     {
         private Graphics _graphics;
 
+        public void DrawSelectionFrame(float x, float y, float width, float height)
+        {
+            // 繪製矩形框
+            using (Pen pen = new Pen(Color.Red, 3))
+            {
+                _graphics.DrawRectangle(pen, x, y, width, height);
+            }
+
+            // 繪製八個小圓點
+            using (Pen grayPen = new Pen(Color.Gray, 3))
+            {
+                float halfWidth = width / 2;
+                float halfHeight = height / 2;
+
+                DrawHollowCircle(x, y, grayPen);           // 左上
+                DrawHollowCircle(x + halfWidth, y, grayPen);  // 上中
+                DrawHollowCircle(x + width, y, grayPen);   // 右上
+                DrawHollowCircle(x, y + halfHeight, grayPen); // 左中
+                DrawHollowCircle(x + width, y + halfHeight, grayPen); // 右中
+                DrawHollowCircle(x, y + height, grayPen);  // 左下
+                DrawHollowCircle(x + halfWidth, y + height, grayPen); // 下中
+                DrawHollowCircle(x + width, y + height, grayPen); // 右下
+            }
+        }
+
+        private void DrawHollowCircle(float x, float y, Pen pen)
+        {
+            float diameter = 4; // 圓的直徑
+            float radius = diameter / 2;
+
+            // 繪製外圈
+            _graphics.DrawEllipse(pen, x - radius, y - radius, diameter, diameter);
+
+
+        }
         public GraphicsAdapter(Graphics graphics)
         {
             _graphics = graphics;

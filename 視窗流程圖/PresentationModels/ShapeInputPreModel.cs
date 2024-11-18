@@ -6,14 +6,14 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using 視窗流程圖.Models;
-using static 視窗流程圖.ShapeSelectViewModel;
+using static 視窗流程圖.ShapeSelectPreModel;
 
 namespace 視窗流程圖
 {
-    public class ShapeInputViewModel : INotifyPropertyChanged
+    public class ShapeInputPreModel : INotifyPropertyChanged
     {
         private ShapesModel _model;
-        public ShapeInputViewModel()
+        public ShapeInputPreModel()
         {
             _model = new ShapesModel(); // 直接在這裡創建 ShapesModel 實例
         }

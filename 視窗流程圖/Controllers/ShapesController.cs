@@ -10,76 +10,90 @@ namespace 視窗流程圖.Controllers
     public class ShapesController
     {
         private readonly ShapesModel _model;
-        private readonly IState _currentState;
+        private IState _currentState;
         private readonly Form1 _view;
-        private Point2D? _startPoint; // 用於記錄起始點 (改為 Point2D)
-        private Point2D? _currentPoint;   // 用於記錄當前滑鼠位置
-        private bool _isDrawing = false; // 用於記錄是否正在繪製
 
-        public ShapesController(Form1 view, ShapesModel model, IState state)
+        public ShapesController(Form1 view, ShapesModel model)
         {
             this._view = view;
             this._model = model;  // 使用外部傳入的 Model，而不是創建新的
-            this._currentState = state;
+            SetNormalState();
+            _model.ReRenderSign += ReRenderSign; // 綁定模型的 ShapeAdded 
+
+        }
+        public void SetNormalState()
+        {
+            _currentState = new NormalState();
+            _currentState.SetModel(_model);
         }
 
-        // 處理滑鼠是否正在繪畫？(沒有問題了)
+        public void SetDrawingState()
+        {
+            _currentState = new DrawingState();
+            _currentState.SetModel(_model);
+        }
+        public void ReRenderSign()
+        {
+            _view.Invalidate();
+        }
         public void HandleMouseDown(MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && _view.IsDrawingMode())
+            if (e.Button == MouseButtons.Left)
             {
-                // 將 System.Drawing.Point 轉換為 Point2D
-                _startPoint = new Point2D(e.Location.X, e.Location.Y);
-                _currentPoint = new Point2D(e.Location.X, e.Location.Y); // 初始當前點設為起始點
-                _isDrawing = true;          // 標記正在繪製
+                _currentState.MouseDown(e.Location.X, e.Location.Y, _view.IsDrawingCursor());                
             }
+            _view.Invalidate();
         }
 
         public void HandleMouseMove(MouseEventArgs e)
         {
-            if (_isDrawing)
-            {
-                // 更新當前滑鼠位置
-                _currentPoint = new Point2D(e.Location.X, e.Location.Y);
-
-                // 觸發 View 重繪
-                _view.Invalidate();  // 這裡會重新執行 OnPaint，進而調用我們的 RenderTempShape
-            }
+            _currentState.MouseMove(e.Location.X, e.Location.Y);
+            _view.Invalidate();  // 這裡會重新執行 OnPaint，進而調用我們的 RenderTempShape
         }
 
         // 處理滑鼠是否繪畫完成？
         public void HandleMouseUp(MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left && _isDrawing)
+            
+            if (e.Button == MouseButtons.Left && _currentState.StartPoint.HasValue && _currentState.CurrentPoint.HasValue && _currentState.CurrentPoint!=_currentState.StartPoint)
             {
-                _isDrawing = false;
-                Point2D endPoint = new Point2D(e.Location.X, e.Location.Y);
-
                 // 通過模型計算圖形數據
-                ShapeData shapeData = _model.CalculateShapeData(_startPoint.Value, endPoint, _view.GetSelectedShapeType());
+                ShapeData shapeData = _model.CalculateShapeData(_currentState.StartPoint.Value, _currentState.CurrentPoint.Value, _view.GetSelectedShapeType());
                 int id = _model.AddShape(shapeData);
 
                 _view.AddShapeToGrid(id, shapeData);
 
                 // 重置狀態
-                _startPoint = null;
                 _view.Cursor = Cursors.Default;
 
                 _view.IntoSelectMode();
             }
+            if (e.Button == MouseButtons.Left && _currentState.SelectedIndex>-1)
+            {
+                _view.UpdateShapeInGrid(_currentState.SelectedIndex, _currentState.SelectedShape);
+            }
+            _currentState.MouseUp();
         }
 
         // 使用 IGraphics 處理臨時形狀的繪製
         public void RenderTempShape(IGraphics g)
         {
-            if (_startPoint.HasValue && _currentPoint.HasValue)
+            if (_currentState.StartPoint.HasValue && _currentState.CurrentPoint.HasValue && _view.GetSelectedShapeType()!="Select")
             {
                 // 計算臨時形狀數據
-                ShapeData tempShapeData = _model.CalculateShapeData(_startPoint.Value, _currentPoint.Value, _view.GetSelectedShapeType());
+                ShapeData tempShapeData = _model.CalculateShapeData(_currentState.StartPoint.Value, _currentState.CurrentPoint.Value, _view.GetSelectedShapeType());
 
                 // 創建臨時形狀並進行繪製
                 Shape tempShape = Factories.ShapeFactory.CreateShape(tempShapeData);
                 tempShape?.Draw(g); // 使用 IGraphics 進行繪製
+            }
+        }
+        public void RenderTempSlection(IGraphics g)
+        {
+            if (_currentState.SelectedShape!=null)
+            {
+                Shape shape = _currentState.SelectedShape;
+                g.DrawSelectionFrame(shape.X, shape.Y, shape.Width, shape.Height);
             }
         }
 
