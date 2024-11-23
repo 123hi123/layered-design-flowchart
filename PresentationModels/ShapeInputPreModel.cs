@@ -6,11 +6,10 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using 視窗流程圖.Models;
-using static 視窗流程圖.ShapeSelectPreModel;
 
-namespace 視窗流程圖
+namespace 視窗流程圖.PresentationModels
 {
-    public class ShapeInputPreModel : INotifyPropertyChanged
+    public class ShapeInputPreModel 
     {
         private ShapesModel _model;
         public ShapeInputPreModel()
@@ -27,16 +26,8 @@ namespace 視窗流程圖
                 if (_isValid != value)
                 {
                     _isValid = value;
-                    OnPropertyChanged();
                 }
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         public string ShapeType { get; set; }
         public string ShapeName { get; set; }

@@ -1,7 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace 視窗流程圖
+namespace 視窗流程圖.PresentationModels
 {
     public class ShapeSelectPreModel
     {
@@ -13,21 +14,55 @@ namespace 視窗流程圖
             Decision,
             Select
         }
-        // 初始化
-        public ShapeType SelectedShapeType { get; set; } = ShapeType.Select;
+
+        public ShapeType SelectedShapeType { get; private set; } = ShapeType.Select;
+        public bool IsCursor { get; private set; } = false;
+
+        // 新增：用於存儲按鈕狀態的字典
+        public Dictionary<ShapeType, bool> ButtonStates { get; } = new Dictionary<ShapeType, bool>();
 
         public event EventHandler ShapeTypeChanged;
         public event EventHandler NormalStateIn;
         public event EventHandler DrawStateIn;
+        public event EventHandler EnterDrawingMode;
+        public event EventHandler ExitDrawingMode;
+
+        public ShapeSelectPreModel()
+        {
+            // 初始化按鈕狀態
+            foreach (ShapeType type in Enum.GetValues(typeof(ShapeType)))
+            {
+                ButtonStates[type] = false;
+            }
+            ButtonStates[ShapeType.Select] = true; // 初始選中 Select
+        }
+
+        public void UpdateCursorState(bool state)
+        {
+            IsCursor = state && SelectedShapeType != ShapeType.Select;
+            if (IsCursor)
+            {
+                EnterDrawingMode?.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                ExitDrawingMode?.Invoke(this, EventArgs.Empty);
+            }
+        }
 
         public void SelectShape(ShapeType shapeType)
         {
-            if (SelectedShapeType != shapeType)
+            SelectedShapeType = shapeType;
+
+            var keys = ButtonStates.Keys.ToList();
+            foreach (var key in keys)
             {
-                SelectedShapeType = shapeType;
-                OnShapeTypeChanged();
+                ButtonStates[key] = (key == shapeType);
             }
-            if (SelectedShapeType == ShapeType.Select)
+
+            OnShapeTypeChanged();
+
+            if (shapeType == ShapeType.Select)
             {
                 OnNormalStateIn();
             }
@@ -35,17 +70,18 @@ namespace 視窗流程圖
             {
                 OnDrawStateIn();
             }
-
         }
-        // observation pattern 
+
         protected virtual void OnShapeTypeChanged()
         {
             ShapeTypeChanged?.Invoke(this, EventArgs.Empty);
         }
+
         protected virtual void OnNormalStateIn()
         {
             NormalStateIn?.Invoke(this, EventArgs.Empty);
         }
+
         protected virtual void OnDrawStateIn()
         {
             DrawStateIn?.Invoke(this, EventArgs.Empty);

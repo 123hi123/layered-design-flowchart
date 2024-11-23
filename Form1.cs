@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using 視窗流程圖.Controllers;
 using 視窗流程圖.Models;
 using 視窗流程圖.Adapter;  // 引入 Adapter 命名空間
+using 視窗流程圖.PresentationModels; 
 
 
 namespace 視窗流程圖
@@ -16,7 +17,8 @@ namespace 視窗流程圖
         private ShapesModel _model;
         private ShapeSelectPreModel _shapeSelectPreModel;
         private ShapeInputPreModel _shapeInputPreModel;
-        
+        private DataGridPreModel _dataGridPreModel;
+
         public Form1()
         {
             InitializeComponent();
@@ -24,7 +26,7 @@ namespace 視窗流程圖
             
             _shapeSelectPreModel = new ShapeSelectPreModel();
             _shapeInputPreModel = new ShapeInputPreModel();
-            
+            _dataGridPreModel = new DataGridPreModel();
             _controller = new ShapesController(this, _model);// 共用model
 
             this.MouseDown += (sender, e) => _controller.HandleMouseDown(e);
@@ -36,6 +38,12 @@ namespace 視窗流程圖
             _shapeSelectPreModel.ShapeTypeChanged += ShapeTypeChanged;
             _shapeSelectPreModel.DrawStateIn += DrawStateIn;
             _shapeSelectPreModel.NormalStateIn += NormalStateIn;
+            // 將 DataGridPreModel 的 DeleteRequested 事件綁定到 Controller 的刪除方法
+            _dataGridPreModel.DeleteRequested += (sender, rowIndex) => _controller.DeleteShape(rowIndex);
+
+            // 訂閱 Presentation Model 的事件
+            _shapeSelectPreModel.EnterDrawingMode += (sender, args) => SetDrawingCursor();
+            _shapeSelectPreModel.ExitDrawingMode += (sender, args) => SetDefaultCursor();
 
             // 綁定 ToolStrip 按鈕的點擊事件
             toolStripButton1.Click += (sender, e) => _shapeSelectPreModel.SelectShape(ShapeSelectPreModel.ShapeType.Start);
@@ -55,15 +63,20 @@ namespace 視窗流程圖
 
         public void UpdateShapeInGrid(int id, Shape shape)
         {
-            foreach (DataGridViewRow row in ShapeDataGridView.Rows)
+            object[] ids = new object[ShapeDataGridView.Rows.Count];
+            for (int i = 0; i < ShapeDataGridView.Rows.Count; i++)
             {
-                if (Convert.ToInt32(row.Cells["ID"].Value) == id)
-                {
-                    row.Cells["X"].Value = shape.X;
-                    row.Cells["Y"].Value = shape.Y;
-                    break;
-                }
+                ids[i] = ShapeDataGridView.Rows[i].Cells["ID"].Value;
             }
+
+            // 使用 Presentation Model 找到對應的行索引
+            int rowIndex = _dataGridPreModel.FindRowIndexById(ids, id);
+
+
+            // 更新找到的行
+            ShapeDataGridView.Rows[rowIndex].Cells["X"].Value = shape.X;
+            ShapeDataGridView.Rows[rowIndex].Cells["Y"].Value = shape.Y;
+
         }
         public void NormalStateIn(object sender, EventArgs e)
         {
@@ -86,13 +99,13 @@ namespace 視窗流程圖
 
         private void UpdateToolStrip()
         {
-            toolStripButton1.Checked = _shapeSelectPreModel.SelectedShapeType == ShapeSelectPreModel.ShapeType.Start;
-            toolStripButton2.Checked = _shapeSelectPreModel.SelectedShapeType == ShapeSelectPreModel.ShapeType.Terminator;
-            toolStripButton3.Checked = _shapeSelectPreModel.SelectedShapeType == ShapeSelectPreModel.ShapeType.Process;
-            toolStripButton4.Checked = _shapeSelectPreModel.SelectedShapeType == ShapeSelectPreModel.ShapeType.Decision;
-            toolStripButton5.Checked = _shapeSelectPreModel.SelectedShapeType == ShapeSelectPreModel.ShapeType.Select;
+            toolStripButton1.Checked = _shapeSelectPreModel.ButtonStates[ShapeSelectPreModel.ShapeType.Start];
+            toolStripButton2.Checked = _shapeSelectPreModel.ButtonStates[ShapeSelectPreModel.ShapeType.Terminator];
+            toolStripButton3.Checked = _shapeSelectPreModel.ButtonStates[ShapeSelectPreModel.ShapeType.Process];
+            toolStripButton4.Checked = _shapeSelectPreModel.ButtonStates[ShapeSelectPreModel.ShapeType.Decision];
+            toolStripButton5.Checked = _shapeSelectPreModel.ButtonStates[ShapeSelectPreModel.ShapeType.Select];
         }
-        
+
 
         // 使用 OnPaint 來重繪所有的形狀
         protected override void OnPaint(PaintEventArgs e)
@@ -108,14 +121,10 @@ namespace 視窗流程圖
             // 獲取所有形狀
             var shapes = _model.GetShapes();
 
-            // 檢查是否有形狀
-            if (shapes != null && shapes.Count > 0)
+            // 繪製所有形狀
+            foreach (var shape in shapes)
             {
-                // 繪製所有形狀
-                foreach (var shape in shapes)
-                {
-                    shape.Draw(adapter);  // 使用 IGraphics 進行繪製
-                }
+                shape.Draw(adapter);  // 使用 IGraphics 進行繪製
             }
 
             // 向 Controller 請求繪製臨時的形狀
@@ -134,27 +143,30 @@ namespace 視窗流程圖
         public bool IsDrawingCursor()
         {
             // 判斷當前游標是否是十字形          
-            return this.Cursor == Cursors.Cross;
+            return _shapeSelectPreModel.IsCursor;
         }
 
         // 當滑鼠進入控件時，恢復預設游標
         private void ControlMouseEnter(object sender, EventArgs e)
         {
-            Cursor = Cursors.Default;
+            _shapeSelectPreModel.UpdateCursorState(false);
         }
 
         // 當滑鼠離開控件時，檢查是否應該變成十字光標
         private void ControlMouseLeave(object sender, EventArgs e)
         {
-            // 檢查當前滑鼠是否在繪畫區，以及是否有工具列按鈕被選中 -> 判斷當前的狀態
-            if (_shapeSelectPreModel.SelectedShapeType != ShapeSelectPreModel.ShapeType.Select)
-            {
-                Cursor = Cursors.Cross;
-            }
-            else
-            {
-                Cursor = Cursors.Default;
-            }
+            _shapeSelectPreModel.UpdateCursorState(true);
+        }
+        // 設置為一般游標模式
+        private void SetDefaultCursor()
+        {
+            this.Cursor = Cursors.Default;
+        }
+
+        // 設置為十字游標模式
+        private void SetDrawingCursor()
+        {
+            this.Cursor = Cursors.Cross;
         }
 
         // 調用 Controller 的 AddShape 方法
@@ -166,11 +178,8 @@ namespace 視窗流程圖
         // DataGridView 刪除按鈕點擊事件處理，調用 Controller 的 DeleteShape 方法
         private void ShapeDataGridViewClick(object sender, DataGridViewCellEventArgs e)
         {
-            // 檢查是否點擊了 "刪除" 按鈕列
-            if (e.ColumnIndex == ShapeDataGridView.Columns["DeleteButton"].Index && e.RowIndex >= 0)
-            {
-                _controller.DeleteShape(e.RowIndex);
-            }
+            int deleteButtonColumnIndex = ShapeDataGridView.Columns["DeleteButton"].Index;
+            _dataGridPreModel.HandleDeleteRequest(e.ColumnIndex, e.RowIndex, deleteButtonColumnIndex);
         }
 
         // Controller 用於添加行的方法
@@ -182,23 +191,14 @@ namespace 視窗流程圖
         // Controller 用於移除行的方法
         public void RemoveShapeFromGrid(int rowIndex)
         {
-            if (rowIndex >= 0 && rowIndex < ShapeDataGridView.Rows.Count)
-            {
-                ShapeDataGridView.Rows.RemoveAt(rowIndex);
-            }
+            ShapeDataGridView.Rows.RemoveAt(rowIndex);           
         }
 
         // 從指定行獲取 ID
         public int GetIdFromRow(int rowIndex)
         {
-            if (int.TryParse(ShapeDataGridView.Rows[rowIndex].Cells["ID"].Value?.ToString(), out int id))
-            {
-                return id;
-            }
-            else
-            {
-                return -1; // 或者任何適合的錯誤值
-            }
+            object cellValue = ShapeDataGridView.Rows[rowIndex].Cells["ID"].Value;
+            return _dataGridPreModel.GetIdFromCellValue(cellValue);
         } 
     }
 }

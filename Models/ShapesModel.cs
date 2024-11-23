@@ -71,7 +71,7 @@ namespace 視窗流程圖.Models
             Shape shape = Factories.ShapeFactory.CreateShape(shapeData);
             int id = _nextId++;
             _shapes.Add(id, shape);
-            ReRenderSign(); // 觸發事件，通知視圖更新
+            ReRenderSign?.Invoke(); // 觸發重繪事件
             return id;
         }
         public void AddShape(int id, Shape shape)
@@ -82,7 +82,7 @@ namespace 視窗流程圖.Models
         public void RemoveShape(int id) // 觸發重新繪制
         {
             _shapes.Remove(id);
-            ReRenderSign(); // 觸發事件，通知視圖更新
+            ReRenderSign?.Invoke(); // 觸發重繪事件
         }
 
         // 隨機生成文字

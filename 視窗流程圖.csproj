@@ -49,6 +49,7 @@
     <Compile Include="Adapter\Point2D.cs" />
     <Compile Include="Adapter\GraphicsAdapter.cs" />
     <Compile Include="Adapter\IGraphics.cs" />
+    <Compile Include="PresentationModels\DataGridPreModel.cs" />
     <Compile Include="PresentationModels\ShapeInputPreModel.cs" />
     <Compile Include="PresentationModels\ShapeSelectPreModel.cs" />
     <Compile Include="Controllers\ShapesController.cs" />
