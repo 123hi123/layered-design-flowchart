@@ -13,7 +13,7 @@ namespace 視窗流程圖.Models
         private int _nextId = 0; // 用于生成唯一的 ID
         public event Action ReRenderSign;
 
-        public (int id, Shape shape) FindShapeAtPosition(int x, int y)
+        public virtual (int id, Shape shape) FindShapeAtPosition(int x, int y)
         {
             foreach (var kvp in _shapes)
             {

@@ -9,13 +9,17 @@ using 視窗流程圖.Models;
 
 namespace 視窗流程圖.PresentationModels
 {
-    public class ShapeInputPreModel 
+    public class ShapeInputPreModel : INotifyPropertyChanged
     {
         private ShapesModel _model;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public ShapeInputPreModel()
         {
             _model = new ShapesModel(); // 直接在這裡創建 ShapesModel 實例
         }
+
         private bool _isValid = false;
 
         public bool IsValid
@@ -26,9 +30,11 @@ namespace 視窗流程圖.PresentationModels
                 if (_isValid != value)
                 {
                     _isValid = value;
+                    OnPropertyChanged();
                 }
             }
         }
+
         public string ShapeType { get; set; }
         public string ShapeName { get; set; }
         public string X { get; set; }
@@ -48,7 +54,6 @@ namespace 視窗流程圖.PresentationModels
                 Height = Height
             };
         }
-        
         
         public void UpdateProperty(string propertyName, string value)
         {
@@ -74,8 +79,12 @@ namespace 視窗流程圖.PresentationModels
                     break;
             }
             IsValid = _model.Valid(GetShapeData());
-            
+            OnPropertyChanged(propertyName);
         }
         
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
