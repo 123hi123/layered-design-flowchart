@@ -146,6 +146,7 @@ namespace 視窗流程圖
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.Black;
             this.label1.Location = new System.Drawing.Point(199, 39);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(37, 15);

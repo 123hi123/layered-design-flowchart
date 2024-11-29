@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -34,6 +34,37 @@ namespace 視窗流程圖
             SetupDataBindings();
             UpdateToolStrip();
             UpdateShapeInputPreModelDisplay();
+
+            // Bind label colors to their respective validation properties
+            Binding binding1 = new Binding("ForeColor", _shapeInputPreModel, "NameValid", true);
+            binding1.Format += (s, e) => {
+                e.Value = (bool)e.Value ? Color.Black : Color.Red;
+            };
+            label1.DataBindings.Add(binding1);
+
+            Binding binding2 = new Binding("ForeColor", _shapeInputPreModel, "XValid", true);
+            binding2.Format += (s, e) => {
+                e.Value = (bool)e.Value ? Color.Black : Color.Red;
+            };
+            label2.DataBindings.Add(binding2);
+
+            Binding binding3 = new Binding("ForeColor", _shapeInputPreModel, "YValid", true);
+            binding3.Format += (s, e) => {
+                e.Value = (bool)e.Value ? Color.Black : Color.Red;
+            };
+            label3.DataBindings.Add(binding3);
+
+            Binding binding4 = new Binding("ForeColor", _shapeInputPreModel, "HeightValid", true);
+            binding4.Format += (s, e) => {
+                e.Value = (bool)e.Value ? Color.Black : Color.Red;
+            };
+            label4.DataBindings.Add(binding4);
+
+            Binding binding5 = new Binding("ForeColor", _shapeInputPreModel, "WidthValid", true);
+            binding5.Format += (s, e) => {
+                e.Value = (bool)e.Value ? Color.Black : Color.Red;
+            };
+            label5.DataBindings.Add(binding5);
         }
 
         private void InitializeShapeInputPreModelDisplay()
@@ -161,6 +192,7 @@ namespace 視窗流程圖
             foreach (var shape in shapes)
             {
                 shape.Draw(adapter);
+                shape.UpdateTextWidth(adapter);
             }
 
             _controller.RenderTempShape(adapter);

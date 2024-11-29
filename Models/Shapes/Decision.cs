@@ -57,7 +57,7 @@ namespace 視窗流程圖.Shapes
             g.DrawPolygon(points);
 
             // 在菱形內部繪製文字
-            g.DrawString(ShapeName, X + Width / 2 - 10, Y + Height / 2 - 10);
+            g.DrawString(ShapeName, TextX, TextY);
         }
     }
 }

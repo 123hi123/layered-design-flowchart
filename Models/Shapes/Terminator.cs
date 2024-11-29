@@ -70,8 +70,7 @@ namespace 視窗流程圖.Shapes
             g.DrawLine(left + arcWidth, Y + Height, right - arcWidth, Y + Height); // 下直線
 
             // 在圖形內部繪製文字
-            float centerX = (left + right) / 2;
-            g.DrawString(ShapeName, centerX - 10, Y + Height / 2 - 10);
+            g.DrawString(ShapeName, TextX, TextY);
         }
     }
 }
