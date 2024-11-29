@@ -42,12 +42,7 @@ namespace 視窗流程圖.Shapes
             return (dx * dx) / (rx * rx) + (dy * dy) / (ry * ry) <= 1;
         }
 
-        private bool IsPointInCircle(float px, float py, float cx, float cy, float radius)
-        {
-            float dx = px - cx;
-            float dy = py - cy;
-            return dx * dx + dy * dy <= radius * radius;
-        }
+        
         // 繪製 Terminator 矩形帶圓弧的圖形
         public override void Draw(IGraphics g)
         {
