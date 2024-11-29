@@ -26,7 +26,7 @@ namespace 視窗流程圖.Shapes
             g.DrawRectangle(X, Y, Width, Height);
 
             // 在矩形內部繪製文字
-            g.DrawString(ShapeName, X + Width / 2 - 10, Y + Height / 2 - 10);
+            g.DrawString(ShapeName, TextX, TextY);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿﻿using System.Collections.Generic;
 using System.Drawing;
 
 namespace 視窗流程圖.Adapter
@@ -39,9 +39,8 @@ namespace 視窗流程圖.Adapter
 
             // 繪製外圈
             _graphics.DrawEllipse(pen, x - radius, y - radius, diameter, diameter);
-
-
         }
+
         public GraphicsAdapter(Graphics graphics)
         {
             _graphics = graphics;
@@ -93,6 +92,43 @@ namespace 視窗流程圖.Adapter
 
                 // 使用 Graphics.DrawPolygon 繪製多邊形
                 _graphics.DrawPolygon(pen, pointFs);
+            }
+        }
+
+        public void DrawTextWithRedFrame(float x, float y, string text)
+        {
+            using (Font font = new Font("Arial", 7))
+            using (Pen redPen = new Pen(Color.Red, 2))
+            {
+                // 測量文字大小
+                SizeF textSize = _graphics.MeasureString(text, font);
+
+                // 繪製紅色外框
+                _graphics.DrawRectangle(redPen, x, y, textSize.Width, textSize.Height);
+
+                // 繪製橘色點在上方線條的中間
+                float dotX = x + textSize.Width / 2;
+                float dotY = y;
+                DrawOrangeDot(dotX, dotY);
+            }
+        }
+        public float GetTextWidth(string text)
+        {
+            using (Font font = new Font("Arial", 7))
+            {
+                // 測量文字大小
+                SizeF textSize = _graphics.MeasureString(text, font);
+                return textSize.Width;
+            }
+        }
+
+        public void DrawOrangeDot(float x, float y)
+        {
+            using (SolidBrush orangeBrush = new SolidBrush(Color.Orange))
+            {
+                float diameter = 8; // 點的直徑
+                float radius = diameter / 2;
+                _graphics.FillEllipse(orangeBrush, x - radius, y - radius, diameter, diameter);
             }
         }
     }

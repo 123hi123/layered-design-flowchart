@@ -94,6 +94,7 @@ namespace 視窗流程圖.Controllers
             {
                 Shape shape = _currentState.SelectedShape;
                 g.DrawSelectionFrame(shape.X, shape.Y, shape.Width, shape.Height);
+                g.DrawTextWithRedFrame(shape.TextX,shape.TextY,shape.ShapeName);
             }
         }
 

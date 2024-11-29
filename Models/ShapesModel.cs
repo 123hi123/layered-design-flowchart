@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,7 @@ namespace 視窗流程圖.Models
         private int _nextId = 0; // 用于生成唯一的 ID
         public event Action ReRenderSign;
 
-        public (int id, Shape shape) FindShapeAtPosition(int x, int y)
+        public virtual (int id, Shape shape) FindShapeAtPosition(int x, int y)
         {
             foreach (var kvp in _shapes)
             {
@@ -24,25 +24,25 @@ namespace 視窗流程圖.Models
             }
             return (-1, null);
         }
-        public bool Valid(ShapeData shapeData)
-        {
-            // 驗證形狀類型和名稱不為空
-            if (string.IsNullOrEmpty(shapeData.ShapeType) || string.IsNullOrEmpty(shapeData.ShapeName))
-            {
-                return false;
-            }
+        //public bool Valid(ShapeData shapeData)
+        //{
+        //    // 驗證形狀類型和名稱不為空
+        //    if (string.IsNullOrEmpty(shapeData.ShapeType) || string.IsNullOrEmpty(shapeData.ShapeName))
+        //    {
+        //        return false;
+        //    }
 
-            // 驗證 X, Y, Width, Height 是否為有效
-            if (!int.TryParse(shapeData.X, out int x) ||
-                !int.TryParse(shapeData.Y, out int y) ||
-                !int.TryParse(shapeData.Width, out int width) || width <= 0 ||
-                !int.TryParse(shapeData.Height, out int height) || height <= 0)
-            {
-                return false;
-            }
+        //    // 驗證 X, Y, Width, Height 是否為有效
+        //    if (!int.TryParse(shapeData.X, out int x) ||
+        //        !int.TryParse(shapeData.Y, out int y) ||
+        //        !int.TryParse(shapeData.Width, out int width) || width <= 0 ||
+        //        !int.TryParse(shapeData.Height, out int height) || height <= 0)
+        //    {
+        //        return false;
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
 
         // 計算圖形的大小和位置
         public ShapeData CalculateShapeData(Point2D startPoint, Point2D endPoint, string shapeType)
@@ -71,7 +71,7 @@ namespace 視窗流程圖.Models
             Shape shape = Factories.ShapeFactory.CreateShape(shapeData);
             int id = _nextId++;
             _shapes.Add(id, shape);
-            ReRenderSign(); // 觸發事件，通知視圖更新
+            ReRenderSign?.Invoke(); // 觸發重繪事件
             return id;
         }
         public void AddShape(int id, Shape shape)
@@ -82,7 +82,7 @@ namespace 視窗流程圖.Models
         public void RemoveShape(int id) // 觸發重新繪制
         {
             _shapes.Remove(id);
-            ReRenderSign(); // 觸發事件，通知視圖更新
+            ReRenderSign?.Invoke(); // 觸發重繪事件
         }
 
         // 隨機生成文字

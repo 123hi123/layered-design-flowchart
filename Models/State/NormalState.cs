@@ -1,4 +1,5 @@
-﻿using 視窗流程圖.Adapter;
+﻿using System;
+using 視窗流程圖.Adapter;
 using 視窗流程圖.Models;
 
 namespace 視窗流程圖.States
@@ -10,6 +11,7 @@ namespace 視窗流程圖.States
         public Point2D? CurrentPoint => _currentPoint;
         public Point2D? StartPoint => _startPoint;
         public Shape SelectedShape { get; private set; } = null;
+        public int OriX, OriY;
 
         public int SelectedIndex { get; private set; } = -1;
 
@@ -28,6 +30,8 @@ namespace 視窗流程圖.States
             {
                 // 記錄開始點
                 _startPoint = new Point2D(x, y);
+                OriX = SelectedShape.TextX;
+                OriY = SelectedShape.TextY;
             }
         }
 
@@ -38,11 +42,19 @@ namespace 視窗流程圖.States
                 // 計算移動距離
                 int deltaX = (int)(x - StartPoint.Value.X);
                 int deltaY = (int)(y - StartPoint.Value.Y);
+                
+                // Check if the text will stay within the shape's boundaries
+                int newTextX = SelectedShape.TextX + deltaX;
+                int newTextY = SelectedShape.TextY + deltaY;
+                SelectedShape.TextX = newTextX;
+                SelectedShape.TextY = newTextY;
 
-                // 更新選中形狀的位置
-                SelectedShape.X += deltaX;
-                SelectedShape.Y += deltaY;
-
+                if (!SelectedShape.IsWithinOrangeDotRange(x, y))
+                {
+                    // 更新選中形狀的位置
+                    SelectedShape.X += deltaX;
+                    SelectedShape.Y += deltaY;
+                }
                 // 更新起始點
                 _startPoint = new Point2D(x, y);
             }
@@ -51,6 +63,11 @@ namespace 視窗流程圖.States
         public void MouseUp()
         {
             _startPoint = null;
+            if (SelectedShape != null && !SelectedShape.ContainsPoint(SelectedShape.TextX + (int)Math.Round(SelectedShape.TextWidth / 2), SelectedShape.TextY))
+            {
+                SelectedShape.TextX = OriX;
+                SelectedShape.TextY = OriY;
+            }
         }
 
     }
