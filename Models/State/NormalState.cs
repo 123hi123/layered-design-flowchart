@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using 視窗流程圖.Adapter;
 using 視窗流程圖.Models;
 
@@ -11,7 +11,13 @@ namespace 視窗流程圖.States
         public Point2D? CurrentPoint => _currentPoint;
         public Point2D? StartPoint => _startPoint;
         public Shape SelectedShape { get; private set; } = null;
+        public int OriTextX, OriTextY;
         public int OriX, OriY;
+
+        private DateTime _lastClickTime;
+        private int _clickCount;
+        private const int DoubleClickThreshold = 500; // milliseconds
+        
 
         public int SelectedIndex { get; private set; } = -1;
 
@@ -30,9 +36,28 @@ namespace 視窗流程圖.States
             {
                 // 記錄開始點
                 _startPoint = new Point2D(x, y);
-                OriX = SelectedShape.TextX;
-                OriY = SelectedShape.TextY;
+                OriTextX = SelectedShape.TextX;
+                OriTextY = SelectedShape.TextY;
+                OriX = SelectedShape.X;
+                OriY = SelectedShape.Y;
+                DateTime now = DateTime.Now;
+                if ((now - _lastClickTime).TotalMilliseconds <= DoubleClickThreshold && SelectedShape.IsWithinOrangeDotRange(x, y))
+                {
+                    _clickCount++;
+                    if (_clickCount == 2)
+                    {
+                        _model.DoubleClickOnText(SelectedIndex, SelectedShape);
+                        _startPoint = null;
+                        _clickCount = 0;
+                    }
+                }
+                else
+                {
+                    _clickCount = 1;
+                }
+                _lastClickTime = now;
             }
+            
         }
 
         public void MouseMove(int x, int y)
@@ -62,11 +87,12 @@ namespace 視窗流程圖.States
 
         public void MouseUp()
         {
+            // 先保存起始點，再清空 for command
             _startPoint = null;
             if (SelectedShape != null && !SelectedShape.ContainsPoint(SelectedShape.TextX + (int)Math.Round(SelectedShape.TextWidth / 2), SelectedShape.TextY))
             {
-                SelectedShape.TextX = OriX;
-                SelectedShape.TextY = OriY;
+                SelectedShape.TextX = OriTextX;
+                SelectedShape.TextY = OriTextY;
             }
         }
 

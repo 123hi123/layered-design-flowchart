@@ -12,7 +12,8 @@ namespace 視窗流程圖.PresentationModels
             Terminator,
             Process,
             Decision,
-            Select
+            Select,
+            DrawLine
         }
 
         public ShapeType SelectedShapeType { get; private set; } = ShapeType.Select;
@@ -24,6 +25,7 @@ namespace 視窗流程圖.PresentationModels
         public event EventHandler ShapeTypeChanged;
         public event EventHandler NormalStateIn;
         public event EventHandler DrawStateIn;
+        public event EventHandler DrawLineStateIn;
         public event EventHandler EnterDrawingMode;
         public event EventHandler ExitDrawingMode;
 
@@ -66,6 +68,10 @@ namespace 視窗流程圖.PresentationModels
             {
                 OnNormalStateIn();
             }
+            else if (shapeType == ShapeType.DrawLine)
+            {
+                OnDrawLineStateIn();
+            }
             else
             {
                 OnDrawStateIn();
@@ -85,6 +91,10 @@ namespace 視窗流程圖.PresentationModels
         protected virtual void OnDrawStateIn()
         {
             DrawStateIn?.Invoke(this, EventArgs.Empty);
+        }
+        protected virtual void OnDrawLineStateIn()
+        {
+            DrawLineStateIn?.Invoke(this, EventArgs.Empty);
         }
     }
 }

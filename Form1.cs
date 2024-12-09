@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -7,6 +7,7 @@ using 視窗流程圖.Controllers;
 using 視窗流程圖.Models;
 using 視窗流程圖.Adapter;
 using 視窗流程圖.PresentationModels;
+using 視窗流程圖.Commands;
 
 namespace 視窗流程圖
 {
@@ -18,6 +19,8 @@ namespace 視窗流程圖
         private ShapeInputPreModel _shapeInputPreModel;
         private DataGridPreModel _dataGridPreModel;
         private Label _shapeInputPreModelDisplay;
+        private CommandManager _commandHistory;
+        private TextEditPreModel _textEditPreModel;
 
         public Form1()
         {
@@ -27,7 +30,12 @@ namespace 視窗流程圖
             _shapeSelectPreModel = new ShapeSelectPreModel();
             _shapeInputPreModel = new ShapeInputPreModel();
             _dataGridPreModel = new DataGridPreModel();
-            _controller = new ShapesController(this, _model);
+            _commandHistory = new CommandManager();
+            _controller = new ShapesController(this, _model, _commandHistory);
+            _textEditPreModel = new TextEditPreModel();
+
+            // 綁定 ShapeUpdated 事件
+            _textEditPreModel.ShapeUpdated += (id, shape) => UpdateShapeInGrid(id, shape);
 
             InitializeShapeInputPreModelDisplay();
             SetupEventHandlers();
@@ -65,6 +73,9 @@ namespace 視窗流程圖
                 e.Value = (bool)e.Value ? Color.Black : Color.Red;
             };
             label5.DataBindings.Add(binding5);
+
+            // Subscribe to the DoubleClickOnTextEvent
+            _model.DoubleClickOnTextEvent += HandleDoubleClickOnText;
         }
 
         private void InitializeShapeInputPreModelDisplay()
@@ -76,7 +87,7 @@ namespace 視窗流程圖
                 Name = "shapeInputPreModelDisplay",
                 Size = new Size(300, 20),
                 TabIndex = 20,
-                Visible = false  // 將標籤設置為不可見不可見
+                Visible = false
             };
 
             this.Controls.Add(_shapeInputPreModelDisplay);
@@ -91,6 +102,8 @@ namespace 視窗流程圖
             _shapeSelectPreModel.ShapeTypeChanged += ShapeTypeChanged;
             _shapeSelectPreModel.DrawStateIn += DrawStateIn;
             _shapeSelectPreModel.NormalStateIn += NormalStateIn;
+            _shapeSelectPreModel.DrawLineStateIn += DrawLineStateIn;
+
             _dataGridPreModel.DeleteRequested += (sender, rowIndex) => _controller.DeleteShape(rowIndex);
 
             _shapeSelectPreModel.EnterDrawingMode += (sender, args) => SetDrawingCursor();
@@ -101,6 +114,7 @@ namespace 視窗流程圖
             toolStripButton3.Click += (sender, e) => _shapeSelectPreModel.SelectShape(ShapeSelectPreModel.ShapeType.Process);
             toolStripButton4.Click += (sender, e) => _shapeSelectPreModel.SelectShape(ShapeSelectPreModel.ShapeType.Decision);
             toolStripButton5.Click += (sender, e) => _shapeSelectPreModel.SelectShape(ShapeSelectPreModel.ShapeType.Select);
+            toolStripButton6.Click += (sender, e) => _shapeSelectPreModel.SelectShape(ShapeSelectPreModel.ShapeType.DrawLine);
 
             comboBox_shape.SelectedIndexChanged += (s, e) => UpdateShapeInputPreModel(nameof(_shapeInputPreModel.ShapeType), comboBox_shape.SelectedItem?.ToString());
             textBox_Text.TextChanged += (s, e) => UpdateShapeInputPreModel(nameof(_shapeInputPreModel.ShapeName), textBox_Text.Text);
@@ -135,8 +149,6 @@ namespace 視窗流程圖
                                               $"IsValid: {_shapeInputPreModel.IsValid}";
         }
 
-        // The rest of the code remains unchanged...
-
         public void UpdateShapeInGrid(int id, Shape shape)
         {
             object[] ids = new object[ShapeDataGridView.Rows.Count];
@@ -149,6 +161,7 @@ namespace 視窗流程圖
 
             ShapeDataGridView.Rows[rowIndex].Cells["X"].Value = shape.X;
             ShapeDataGridView.Rows[rowIndex].Cells["Y"].Value = shape.Y;
+            ShapeDataGridView.Rows[rowIndex].Cells["Text_grid"].Value = shape.ShapeName;
         }
 
         public void NormalStateIn(object sender, EventArgs e)
@@ -159,6 +172,10 @@ namespace 視窗流程圖
         public void DrawStateIn(object sender, EventArgs e)
         {
             _controller.SetDrawingState();
+        }
+        public void DrawLineStateIn(object sender, EventArgs e)
+        {
+            _controller.SetDrawingLineState();
         }
 
         public void IntoSelectMode()
@@ -178,6 +195,7 @@ namespace 視窗流程圖
             toolStripButton3.Checked = _shapeSelectPreModel.ButtonStates[ShapeSelectPreModel.ShapeType.Process];
             toolStripButton4.Checked = _shapeSelectPreModel.ButtonStates[ShapeSelectPreModel.ShapeType.Decision];
             toolStripButton5.Checked = _shapeSelectPreModel.ButtonStates[ShapeSelectPreModel.ShapeType.Select];
+            toolStripButton6.Checked = _shapeSelectPreModel.ButtonStates[ShapeSelectPreModel.ShapeType.DrawLine];
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -247,6 +265,13 @@ namespace 視窗流程圖
 
         public void RemoveShapeFromGrid(int rowIndex)
         {
+            object[] row = new object[ShapeDataGridView.ColumnCount];
+            for (int i = 0; i < ShapeDataGridView.ColumnCount; i++)
+            {
+                row[i] = ShapeDataGridView.Rows[rowIndex].Cells[i].Value;
+            }
+            int id = Convert.ToInt32(row[1]);
+            ShapeData delShapeData = new ShapeData { ShapeType = row[2].ToString(), ShapeName = row[3].ToString(), X = row[4].ToString(), Y = row[5].ToString(), Width = row[6].ToString(), Height = row[7].ToString() };
             ShapeDataGridView.Rows.RemoveAt(rowIndex);
         }
 
@@ -254,6 +279,26 @@ namespace 視窗流程圖
         {
             object cellValue = ShapeDataGridView.Rows[rowIndex].Cells["ID"].Value;
             return _dataGridPreModel.GetIdFromCellValue(cellValue);
+        }
+
+        public void Undo(object sender, EventArgs e)
+        {
+            _commandHistory.Undo();
+        }
+
+        public void Redo(object sender, EventArgs e)
+        {
+            _commandHistory.Redo();
+        }
+
+        private void HandleDoubleClickOnText(int id, Shape shape)
+        {
+            string originalText = shape.ShapeName;
+            using (var form = new TextEditForm(originalText))
+            {
+                form.TextConfirmedOk += (newText) => _textEditPreModel.UpdateShapeName(id, shape, newText);
+                form.ShowDialog();
+            }
         }
     }
 }

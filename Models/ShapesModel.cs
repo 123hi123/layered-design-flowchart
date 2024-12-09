@@ -12,6 +12,7 @@ namespace 視窗流程圖.Models
         private Dictionary<int, Shape> _shapes = new Dictionary<int, Shape>();
         private int _nextId = 0; // 用于生成唯一的 ID
         public event Action ReRenderSign;
+        public event Action<int, Shape> DoubleClickOnTextEvent;
 
         public virtual (int id, Shape shape) FindShapeAtPosition(int x, int y)
         {
@@ -24,35 +25,14 @@ namespace 視窗流程圖.Models
             }
             return (-1, null);
         }
-        //public bool Valid(ShapeData shapeData)
-        //{
-        //    // 驗證形狀類型和名稱不為空
-        //    if (string.IsNullOrEmpty(shapeData.ShapeType) || string.IsNullOrEmpty(shapeData.ShapeName))
-        //    {
-        //        return false;
-        //    }
 
-        //    // 驗證 X, Y, Width, Height 是否為有效
-        //    if (!int.TryParse(shapeData.X, out int x) ||
-        //        !int.TryParse(shapeData.Y, out int y) ||
-        //        !int.TryParse(shapeData.Width, out int width) || width <= 0 ||
-        //        !int.TryParse(shapeData.Height, out int height) || height <= 0)
-        //    {
-        //        return false;
-        //    }
-
-        //    return true;
-        //}
-
-        // 計算圖形的大小和位置
         public ShapeData CalculateShapeData(Point2D startPoint, Point2D endPoint, string shapeType)
         {
-            float x = Math.Min(startPoint.X, endPoint.X);  // 計算左上角 X
-            float y = Math.Min(startPoint.Y, endPoint.Y);  // 計算左上角 Y
-            float width = Math.Abs(endPoint.X - startPoint.X);  // 計算寬度
-            float height = Math.Abs(endPoint.Y - startPoint.Y); // 計算高度
+            float x = Math.Min(startPoint.X, endPoint.X);
+            float y = Math.Min(startPoint.Y, endPoint.Y);
+            float width = Math.Abs(endPoint.X - startPoint.X);
+            float height = Math.Abs(endPoint.Y - startPoint.Y);
 
-            // 隨機生成文字
             string randomText = GenerateRandomText();
 
             return new ShapeData
@@ -66,31 +46,32 @@ namespace 視窗流程圖.Models
             };
         }
 
-        public int AddShape(ShapeData shapeData) // 觸發重新繪制
+        public int AddShape(ShapeData shapeData)
         {
             Shape shape = Factories.ShapeFactory.CreateShape(shapeData);
             int id = _nextId++;
             _shapes.Add(id, shape);
-            ReRenderSign?.Invoke(); // 觸發重繪事件
+            ReRenderSign?.Invoke();
             return id;
         }
+
         public void AddShape(int id, Shape shape)
         {
             _shapes[id] = shape;
-            ReRenderSign?.Invoke(); // 觸發重繪事件
-        }
-        public void RemoveShape(int id) // 觸發重新繪制
-        {
-            _shapes.Remove(id);
-            ReRenderSign?.Invoke(); // 觸發重繪事件
+            ReRenderSign?.Invoke();
         }
 
-        // 隨機生成文字
+        public void RemoveShape(int id)
+        {
+            _shapes.Remove(id);
+            ReRenderSign?.Invoke();
+        }
+
         private string GenerateRandomText()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var random = new Random();
-            int length = random.Next(3, 11); // 生成3-10個字符的隨機字符串
+            int length = random.Next(3, 11);
             char[] result = new char[length];
             for (int i = 0; i < length; i++)
             {
@@ -111,6 +92,11 @@ namespace 視窗流程圖.Models
                 return shape;
             }
             return null;
+        }
+
+        public void DoubleClickOnText(int id, Shape shape)
+        {
+            DoubleClickOnTextEvent?.Invoke(id, shape);
         }
     }
 }

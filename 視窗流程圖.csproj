@@ -49,6 +49,10 @@
     <Compile Include="Adapter\Point2D.cs" />
     <Compile Include="Adapter\GraphicsAdapter.cs" />
     <Compile Include="Adapter\IGraphics.cs" />
+    <Compile Include="Commands\CommandManager.cs" />
+    <Compile Include="Commands\DataGridCommand.cs" />
+    <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Models\State\DrawingLineState.cs" />
     <Compile Include="PresentationModels\DataGridPreModel.cs" />
     <Compile Include="PresentationModels\ShapeInputPreModel.cs" />
     <Compile Include="PresentationModels\ShapeSelectPreModel.cs" />
@@ -67,11 +71,15 @@
     <Compile Include="Models\Shapes\Process.cs" />
     <Compile Include="Models\Shapes\Terminator.cs" />
     <Compile Include="Models\Shapes\Start.cs" />
+    <Compile Include="PresentationModels\TextEditPreModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\State\NormalState.cs" />
     <Compile Include="Models\State\DrawingState.cs" />
     <Compile Include="Models\State\IState.cs" />
+    <Compile Include="TextEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>
