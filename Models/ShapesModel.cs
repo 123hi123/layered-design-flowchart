@@ -1,9 +1,10 @@
-﻿﻿using System;
+﻿﻿﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using 視窗流程圖.Adapter;
+using 視窗流程圖.Commands;
 
 namespace 視窗流程圖.Models
 {
@@ -11,14 +12,15 @@ namespace 視窗流程圖.Models
     {
         private Dictionary<int, Shape> _shapes = new Dictionary<int, Shape>();
         private Dictionary<int, Line> _lines = new Dictionary<int, Line>();
+        private CommandManager _commandManager = new CommandManager(); // 用于管理命令
 
         private int _nextId = 0; // 用于生成唯一的 ID
         public event Action ReRenderSign;
         public event Action IntoSelectionSign;
-
+        public event Action<int> DataGridRemoveById;
         public event Action<int, Shape> DoubleClickOnTextEvent;
         // New event for adding a line to the DataGridView
-        public event Action<int, Line> LineAddedToGridView;
+        
 
         public virtual (int id, Shape shape) FindShapeAtPosition(int x, int y)
         {
@@ -51,48 +53,64 @@ namespace 視窗流程圖.Models
                 Height = height.ToString()
             };
         }
+        public void TextChangeCommand(Shape shape, string ori,string text)
+        {
+            _commandManager.ExecuteCommand(new TextCommand(this, shape, ori, text));
+        }
 
         public void AddShapeByShapeData(ShapeData shapeData)
         {
             Shape shape = Factories.ShapeFactory.CreateShape(shapeData);
-            AddShape(shape);
+            AddShapeCommand(shape);
         }
-        public int AddLine(Line line)
+        public void AddLineCoommand(Line line)//nothis
         {
             int id = _nextId++;
-            _lines.Add(id, line);
-            ReRenderSign?.Invoke();
-            // Trigger the new event for adding the line to the DataGridView
-            return id;
+            _commandManager.ExecuteCommand(new AddLineCommand(this, line, id));
         }
         public void InsertLine(int id, Line line)
         {
             _lines[id] = line;
             ReRenderSign?.Invoke();
         }  
-
+        public void RemoveLineCommand(int id)//nothis
+        {
+            _commandManager.ExecuteCommand(new RemoveLineCommand(this, GetLine(id), id));
+        }
+        public void MoveCommand(Shape shape, Point2D ori, Point2D oriText, Point2D newPos, Point2D newText)
+        {
+            _commandManager.ExecuteCommand(new MoveTextShapeCommand(this,shape, ori, oriText, newPos, newText));
+        }
+        public void ReRender()
+        {
+            ReRenderSign?.Invoke();
+        }
         public void RemoveLine(int id)
         {
             _lines.Remove(id);
+            DataGridRemoveById?.Invoke(id);
             ReRenderSign?.Invoke();
         }
 
-        public int AddShape(Shape shape)
+        public void AddShapeCommand(Shape shape)
         {
             int id = _nextId++;
-            _shapes.Add(id, shape);
-            ReRenderSign?.Invoke();
-            return id;
+            _commandManager.ExecuteCommand(new AddShapeCommand(this, shape, id));
         }
         public void InsertShape(int id, Shape shape)
         {
             _shapes[id] = shape;
             ReRenderSign?.Invoke();
         }
+        public void RemoveShapeCommand(int id)
+        {
+            _commandManager.ExecuteCommand(new RemoveShapeCommand(this, GetShape(id), id));
 
+        }
         public void RemoveShape(int id)
         {
             _shapes.Remove(id);
+            DataGridRemoveById?.Invoke(id);
             ReRenderSign?.Invoke();
         }
 
@@ -134,6 +152,14 @@ namespace 視窗流程圖.Models
             }
             return null;
         }
+        public Line GetLine(int id)
+        {
+            if (_lines.TryGetValue(id, out Line line))
+            {
+                return line;
+            }
+            return null;
+        }
 
         public void DoubleClickOnText(int id, Shape shape)
         {
@@ -142,6 +168,15 @@ namespace 視窗流程圖.Models
         public void IntoSelection()
         {
             IntoSelectionSign?.Invoke();
+        }
+        public void Undo()
+        {
+            _commandManager.Undo();
+        }
+
+        public void Redo()
+        {
+            _commandManager.Redo();
         }
     }
 }

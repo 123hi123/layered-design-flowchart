@@ -49,9 +49,14 @@
     <Compile Include="Adapter\Point2D.cs" />
     <Compile Include="Adapter\GraphicsAdapter.cs" />
     <Compile Include="Adapter\IGraphics.cs" />
+    <Compile Include="Commands\AddShapeCommand.cs" />
+    <Compile Include="Commands\AddLineCommand.cs" />
     <Compile Include="Commands\CommandManager.cs" />
-    <Compile Include="Commands\DataGridCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
+    <Compile Include="Commands\TextCommand.cs" />
+    <Compile Include="Commands\MoveTextShapeCommand.cs" />
+    <Compile Include="Commands\RemoveShapeCommand.cs" />
+    <Compile Include="Commands\RemoveLineCommand.cs" />
     <Compile Include="Models\Line.cs" />
     <Compile Include="Models\State\DrawingLineState.cs" />
     <Compile Include="PresentationModels\DataGridPreModel.cs" />
@@ -72,7 +77,6 @@
     <Compile Include="Models\Shapes\Process.cs" />
     <Compile Include="Models\Shapes\Terminator.cs" />
     <Compile Include="Models\Shapes\Start.cs" />
-    <Compile Include="PresentationModels\TextEditPreModel.cs" />
     <Compile Include="PresentationModels\UpdatePreModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

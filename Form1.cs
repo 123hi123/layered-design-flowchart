@@ -7,7 +7,6 @@ using 視窗流程圖.Controllers;
 using 視窗流程圖.Models;
 using 視窗流程圖.Adapter;
 using 視窗流程圖.PresentationModels;
-using 視窗流程圖.Commands;
 
 namespace 視窗流程圖
 {
@@ -19,8 +18,7 @@ namespace 視窗流程圖
         private ShapeInputPreModel _shapeInputPreModel;
         private DataGridPreModel _dataGridPreModel;
         private Label _shapeInputPreModelDisplay;
-        private CommandManager _commandHistory;
-        private TextEditPreModel _textEditPreModel;
+        //private TextEditPreModel _textEditPreModel;
         private UpdatePreModel _updatePreModel;
 
 
@@ -32,9 +30,8 @@ namespace 視窗流程圖
             _shapeSelectPreModel = new ShapeSelectPreModel();
             _shapeInputPreModel = new ShapeInputPreModel();
             _dataGridPreModel = new DataGridPreModel();
-            _commandHistory = new CommandManager();
-            _controller = new ShapesController(this, _model, _commandHistory);
-            _textEditPreModel = new TextEditPreModel();
+            _controller = new ShapesController(this, _model);
+            //_textEditPreModel = new TextEditPreModel();
             _updatePreModel = new UpdatePreModel();
             _updatePreModel.AddNewRowEvent += AddNewRowToDataGridView;
             _updatePreModel.UpdateExistingRowEvent += UpdateExistingRowInDataGridView;
@@ -42,6 +39,7 @@ namespace 視窗流程圖
             // 綁定 ShapeUpdated 事件
             //_textEditPreModel.ShapeUpdated += (id, shape) => UpdateShapeInGrid(id, shape);
             _model.IntoSelectionSign += IntoSelectMode;
+            _model.DataGridRemoveById += DataGridRemoveById;
 
 
             InitializeShapeInputPreModelDisplay();
@@ -280,6 +278,17 @@ namespace 視窗流程圖
             int deleteButtonColumnIndex = ShapeDataGridView.Columns["DeleteButton"].Index;
             _dataGridPreModel.HandleDeleteRequest(e.ColumnIndex, e.RowIndex, deleteButtonColumnIndex, ShapeDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString());
         }
+        public void DataGridRemoveById(int id)
+        {
+            object[] ids = new object[ShapeDataGridView.Rows.Count];
+            for (int i = 0; i < ShapeDataGridView.Rows.Count; i++)
+            {
+                ids[i] = ShapeDataGridView.Rows[i].Cells["ID"].Value;
+            }
+
+            int rowIndex = _dataGridPreModel.FindRowIndexById(ids, id);
+            RemoveFromGrid(rowIndex);
+        }
 
         public void RemoveFromGrid(int rowIndex)
         {
@@ -302,12 +311,12 @@ namespace 視窗流程圖
 
         public void Undo(object sender, EventArgs e)
         {
-            _commandHistory.Undo();
+            _model.Undo();
         }
 
         public void Redo(object sender, EventArgs e)
         {
-            _commandHistory.Redo();
+            _model.Redo();
         }
 
         private void HandleDoubleClickOnText(int id, Shape shape)
@@ -315,7 +324,7 @@ namespace 視窗流程圖
             string originalText = shape.ShapeName;
             using (var form = new TextEditForm(originalText))
             {
-                form.TextConfirmedOk += (newText) => _textEditPreModel.UpdateShapeName(id, shape, newText);
+                form.TextConfirmedOk += (newText) => _model.TextChangeCommand(shape, originalText,newText);
                 form.ShowDialog();
             }
         }

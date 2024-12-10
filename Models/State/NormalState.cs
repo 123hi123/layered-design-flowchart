@@ -15,8 +15,9 @@ namespace 視窗流程圖.States
         public Point2D? CurrentPoint => _currentPoint;
         public Point2D? StartPoint => _startPoint;
         public Shape SelectedShape { get; private set; } = null;
-        public int OriTextX, OriTextY;
-        public int OriX, OriY;
+        public Point2D? OriText { get; private set; } = null;
+        public Point2D? Ori { get; private set; } = null;
+        
 
         private DateTime _lastClickTime;
         private int _clickCount;
@@ -42,10 +43,8 @@ namespace 視窗流程圖.States
             {
                 // 記錄開始點
                 _startPoint = new Point2D(x, y);
-                OriTextX = SelectedShape.TextX;
-                OriTextY = SelectedShape.TextY;
-                OriX = SelectedShape.X;
-                OriY = SelectedShape.Y;
+                OriText = new Point2D(SelectedShape.TextX, SelectedShape.TextY);
+                Ori = new Point2D(SelectedShape.X, SelectedShape.Y);
                 DateTime now = DateTime.Now;
                 if ((now - _lastClickTime).TotalMilliseconds <= DoubleClickThreshold && SelectedShape.IsWithinOrangeDotRange(x, y))
                 {
@@ -96,11 +95,20 @@ namespace 視窗流程圖.States
 
             // 先保存起始點，再清空 for command
             _startPoint = null;
-            if (SelectedShape != null && !SelectedShape.ContainsPoint(SelectedShape.TextX + (int)Math.Round(SelectedShape.TextWidth / 2), SelectedShape.TextY))
+            //如果說我今天只移動字的話，那才有可能讓字飛出去 那這如果飛出去的話，這就不是一筆成功的記錄我們就不用記錄
+            if (SelectedShape != null)
             {
-                SelectedShape.TextX = OriTextX;
-                SelectedShape.TextY = OriTextY;
+                if (!SelectedShape.ContainsPoint(SelectedShape.TextX + (int)Math.Round(SelectedShape.TextWidth / 2), SelectedShape.TextY))
+                {
+                    SelectedShape.TextX = (int)OriText.Value.X;
+                    SelectedShape.TextY = (int)OriText.Value.Y;
+                }
+                else if (Ori!=new Point2D(SelectedShape.X,SelectedShape.Y) || OriText != new Point2D(SelectedShape.TextX, SelectedShape.TextY))
+                {
+                    _model.MoveCommand(SelectedShape, Ori.Value, OriText.Value, new Point2D(SelectedShape.X, SelectedShape.Y), new Point2D(SelectedShape.TextX, SelectedShape.TextY));
+                }
             }
+            
         }
 
     }

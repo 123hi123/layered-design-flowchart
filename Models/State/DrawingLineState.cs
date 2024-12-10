@@ -72,7 +72,7 @@ namespace 視窗流程圖.States
                 {
                     Line.EndShapeId = SelectedIndex;
                     Line.EndConnectionPoint = Direct;
-                    _model.AddLine(Line);
+                    _model.AddLineCoommand(Line);
                 }
                 
             }

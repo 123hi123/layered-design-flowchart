@@ -15,13 +15,10 @@ namespace 視窗流程圖.Controllers
         private IState _currentState;
         private readonly Form1 _view;
 
-        private readonly CommandManager _commandHistory;
-
-        public ShapesController(Form1 view, ShapesModel model, CommandManager commandHistory)
+        public ShapesController(Form1 view, ShapesModel model)
         {
             this._view = view;
             this._model = model;  // 使用外部傳入的 Model，而不是創建新的
-            this._commandHistory = commandHistory;
             SetNormalState();
             _model.ReRenderSign += ReRenderSign; // 綁定模型的 ShapeAdded 
         }
@@ -125,15 +122,12 @@ namespace 視窗流程圖.Controllers
         public void DeleteShape(int rowIndex)
         {
             int id = Convert.ToInt32(_view.GetIdFromRow(rowIndex));
-            _view.RemoveFromGrid(rowIndex);
-            _model.RemoveShape(id);
-            
+            _model.RemoveShapeCommand(id); // to command
         }
         public void DeleteLine(int rowIndex)
         {
             int id = Convert.ToInt32(_view.GetIdFromRow(rowIndex));
-            _model.RemoveLine(id);
-            _view.RemoveFromGrid(rowIndex);
+            _model.RemoveLineCommand(id);
         }
 
         // 根據 rowIndex 獲取 Shape
