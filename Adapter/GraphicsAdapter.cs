@@ -31,6 +31,20 @@ namespace 視窗流程圖.Adapter
                 DrawHollowCircle(x + width, y + height, grayPen); // 右下
             }
         }
+        public void DrawLineSelectionFrame(float x, float y, float width, float height)
+        {
+            // 繪製4個小圓點
+            using (Pen grayPen = new Pen(Color.Gray, 6))
+            {
+                float halfWidth = width / 2;
+                float halfHeight = height / 2;
+
+                DrawHollowCircle(x + halfWidth, y, grayPen);  // 上中
+                DrawHollowCircle(x, y + halfHeight, grayPen); // 左中
+                DrawHollowCircle(x + width, y + halfHeight, grayPen); // 右中
+                DrawHollowCircle(x + halfWidth, y + height, grayPen); // 下中
+            }
+        }
 
         private void DrawHollowCircle(float x, float y, Pen pen)
         {
@@ -127,6 +141,15 @@ namespace 視窗流程圖.Adapter
             using (SolidBrush orangeBrush = new SolidBrush(Color.Orange))
             {
                 float diameter = 8; // 點的直徑
+                float radius = diameter / 2;
+                _graphics.FillEllipse(orangeBrush, x - radius, y - radius, diameter, diameter);
+            }
+        }
+        public void DrawLineRedDot(float x, float y)
+        {
+            using (SolidBrush orangeBrush = new SolidBrush(Color.Orange))
+            {
+                float diameter = 12; // 點的直徑
                 float radius = diameter / 2;
                 _graphics.FillEllipse(orangeBrush, x - radius, y - radius, diameter, diameter);
             }

@@ -1,41 +1,55 @@
-ï»¿ï»¿using System;
+using System;
 using System.Collections.Generic;
-using è¦–çª—æµç¨‹åœ–.Models;
+using System.Data.SqlTypes;
+using µøµ¡¬yµ{¹Ï.Models;
 
-namespace è¦–çª—æµç¨‹åœ–.PresentationModels
+namespace µøµ¡¬yµ{¹Ï.PresentationModels
 {
     public class DataGridPreModel
     {
-        // å®šä¹‰ä¸€ä¸ªåˆ é™¤äº‹ä»¶
-        public event EventHandler<int> DeleteRequested;
+        // ©w?¤@??°£¨Æ¥ó
+        public event EventHandler<int> DeleteShapeRequested;
+        public event EventHandler<int> DeleteLineRequested;
 
-        // æ£€æŸ¥å¹¶å¤„ç†åˆ é™¤æ“ä½œçš„æ–¹æ³•
-        public void HandleDeleteRequest(int columnIndex, int rowIndex, int deleteButtonColumnIndex)
+        // ?¬d¦}?²z?°£¾Ş§@ªº¤èªk
+        public void HandleDeleteRequest(int columnIndex, int rowIndex, int deleteButtonColumnIndex, string type)
         {
             if (IsDeleteButtonClicked(columnIndex, rowIndex, deleteButtonColumnIndex))
             {
-                // å¦‚æœæ¡ä»¶æ»¡è¶³ï¼Œè§¦å‘åˆ é™¤äº‹ä»¶
-                OnDeleteRequested(rowIndex);
+                if (type != "Line")
+                {
+                    OnDeleteShapeRequested(rowIndex);
+                }
+                else
+                {
+                    OnDeleteLineRequested(rowIndex);
+                }
+                // ¦pªG?¥ó?¨¬¡AàD??°£¨Æ¥ó
+
             }
         }
 
-        // æ£€æŸ¥æ˜¯å¦ç‚¹å‡»äº†åˆ é™¤æŒ‰é’®
+        // ?¬d¬O§_??¤F?°£«ö?
         private bool IsDeleteButtonClicked(int columnIndex, int rowIndex, int deleteButtonColumnIndex)
         {
             return columnIndex == deleteButtonColumnIndex && rowIndex >= 0;
         }
 
-        // è§¦å‘åˆ é™¤äº‹ä»¶çš„æ–¹æ³•
-        protected virtual void OnDeleteRequested(int rowIndex)
+        // àD??°£¨Æ¥óªº¤èªk
+        protected virtual void OnDeleteShapeRequested(int rowIndex)
         {
-            DeleteRequested?.Invoke(this, rowIndex);
+            DeleteShapeRequested?.Invoke(this, rowIndex);
+        }
+        protected virtual void OnDeleteLineRequested(int rowIndex)
+        {
+            DeleteLineRequested?.Invoke(this, rowIndex);
         }
 
         public int GetIdFromCellValue(object cellValue)
         {
             if (cellValue == null)
             {
-                return -1; // æˆ–è€…å…¶ä»–è¡¨ç¤ºæ— æ•ˆ ID çš„å€¼
+                return -1; // ©ÎªÌ¨ä¥Lªí¥Ü?®Ä ID ªº­È
             }
 
             string cellValueString = cellValue.ToString();
@@ -44,7 +58,7 @@ namespace è¦–çª—æµç¨‹åœ–.PresentationModels
                 return id;
             }
 
-            return -1; // è§£æå¤±è´¥æ—¶è¿”å›æ— æ•ˆ ID
+            return -1; // ¸ÑªR¥¢??ªğ¦^?®Ä ID
         }
 
         public int FindRowIndexById(object[] idValues, int targetId)
@@ -58,20 +72,5 @@ namespace è¦–çª—æµç¨‹åœ–.PresentationModels
             }
             return -1;
         }
-
-        //// æ–°å¢æ–¹æ³•ï¼šæ ¹æ® rowIndex å’Œ shapesData è·å– ShapeData
-        //public ShapeData GetShapeDataFromRow(int rowIndex, object[] row)
-        //{
-        //    // ä½¿ç”¨ for å¾ªç¯æ¥æ‰¾åˆ°å¯¹åº”çš„ ShapeData
-        //    for (int i = 0; i < shapesData.Count; i++)
-        //    {
-        //        if (i == rowIndex)
-        //        {
-        //            return shapesData[i];
-        //        }
-        //    }
-
-        //    return null; // å¦‚æœæ²¡æœ‰æ‰¾åˆ°ï¼Œè¿”å› null
-        //}
     }
 }

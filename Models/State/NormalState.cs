@@ -8,6 +8,10 @@ namespace 視窗流程圖.States
     {
         private Point2D? _startPoint;
         private Point2D? _currentPoint;
+        public Point2D? TempStart { get; private set; } = null;
+        public Point2D? TempEnd { get; private set; } = null;
+        public string DrawingFrameType{ get; private set; } = null;
+
         public Point2D? CurrentPoint => _currentPoint;
         public Point2D? StartPoint => _startPoint;
         public Shape SelectedShape { get; private set; } = null;
@@ -17,7 +21,8 @@ namespace 視窗流程圖.States
         private DateTime _lastClickTime;
         private int _clickCount;
         private const int DoubleClickThreshold = 500; // milliseconds
-        
+        public Point2D? TouchedPoint { get; private set; } = null;
+
 
         public int SelectedIndex { get; private set; } = -1;
 
@@ -26,6 +31,7 @@ namespace 視窗流程圖.States
         public void SetModel(ShapesModel model)
         {
             _model = model;
+            DrawingFrameType = "Normal"; 
         }
         public void MouseDown(int x, int y, bool isDrawingMode)
         {
@@ -85,8 +91,9 @@ namespace 視窗流程圖.States
             }
         }
 
-        public void MouseUp()
+        public void MouseUp(int x, int y)
         {
+
             // 先保存起始點，再清空 for command
             _startPoint = null;
             if (SelectedShape != null && !SelectedShape.ContainsPoint(SelectedShape.TextX + (int)Math.Round(SelectedShape.TextWidth / 2), SelectedShape.TextY))

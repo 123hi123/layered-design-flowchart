@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿﻿﻿﻿﻿﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -21,6 +21,8 @@ namespace 視窗流程圖
         private Label _shapeInputPreModelDisplay;
         private CommandManager _commandHistory;
         private TextEditPreModel _textEditPreModel;
+        private UpdatePreModel _updatePreModel;
+
 
         public Form1()
         {
@@ -33,9 +35,14 @@ namespace 視窗流程圖
             _commandHistory = new CommandManager();
             _controller = new ShapesController(this, _model, _commandHistory);
             _textEditPreModel = new TextEditPreModel();
+            _updatePreModel = new UpdatePreModel();
+            _updatePreModel.AddNewRowEvent += AddNewRowToDataGridView;
+            _updatePreModel.UpdateExistingRowEvent += UpdateExistingRowInDataGridView;
 
             // 綁定 ShapeUpdated 事件
-            _textEditPreModel.ShapeUpdated += (id, shape) => UpdateShapeInGrid(id, shape);
+            //_textEditPreModel.ShapeUpdated += (id, shape) => UpdateShapeInGrid(id, shape);
+            _model.IntoSelectionSign += IntoSelectMode;
+
 
             InitializeShapeInputPreModelDisplay();
             SetupEventHandlers();
@@ -104,7 +111,8 @@ namespace 視窗流程圖
             _shapeSelectPreModel.NormalStateIn += NormalStateIn;
             _shapeSelectPreModel.DrawLineStateIn += DrawLineStateIn;
 
-            _dataGridPreModel.DeleteRequested += (sender, rowIndex) => _controller.DeleteShape(rowIndex);
+            _dataGridPreModel.DeleteShapeRequested += (sender, rowIndex) => _controller.DeleteShape(rowIndex);
+            _dataGridPreModel.DeleteLineRequested += (sender, rowIndex) => _controller.DeleteLine(rowIndex);
 
             _shapeSelectPreModel.EnterDrawingMode += (sender, args) => SetDrawingCursor();
             _shapeSelectPreModel.ExitDrawingMode += (sender, args) => SetDefaultCursor();
@@ -126,6 +134,18 @@ namespace 視窗流程圖
             _shapeInputPreModel.PropertyChanged += (s, e) => UpdateShapeInputPreModelDisplay();
         }
 
+        private void AddNewRowToDataGridView(object[] data)
+        {
+            ShapeDataGridView.Rows.Add(data);
+        }
+
+        private void UpdateExistingRowInDataGridView(int rowIndex, object[] data)
+        {
+            for (int i = 0; i < data.Length && i < ShapeDataGridView.Columns.Count; i++)
+            {
+                ShapeDataGridView.Rows[rowIndex].Cells[i].Value = data[i];
+            }
+        }
         private void SetupDataBindings()
         {
             AddNewShapeButton.DataBindings.Clear();
@@ -147,21 +167,6 @@ namespace 視窗流程圖
                                               $"Height: {_shapeInputPreModel.Height}, " +
                                               $"ButtonEnabled: {AddNewShapeButton.Enabled}, " +
                                               $"IsValid: {_shapeInputPreModel.IsValid}";
-        }
-
-        public void UpdateShapeInGrid(int id, Shape shape)
-        {
-            object[] ids = new object[ShapeDataGridView.Rows.Count];
-            for (int i = 0; i < ShapeDataGridView.Rows.Count; i++)
-            {
-                ids[i] = ShapeDataGridView.Rows[i].Cells["ID"].Value;
-            }
-
-            int rowIndex = _dataGridPreModel.FindRowIndexById(ids, id);
-
-            ShapeDataGridView.Rows[rowIndex].Cells["X"].Value = shape.X;
-            ShapeDataGridView.Rows[rowIndex].Cells["Y"].Value = shape.Y;
-            ShapeDataGridView.Rows[rowIndex].Cells["Text_grid"].Value = shape.ShapeName;
         }
 
         public void NormalStateIn(object sender, EventArgs e)
@@ -205,16 +210,34 @@ namespace 視窗流程圖
             var adapter = new GraphicsAdapter(e.Graphics);
             e.Graphics.Clear(this.BackColor);
 
-            var shapes = _model.GetShapes();
-
-            foreach (var shape in shapes)
+            var shapes = _model.GetShapesWithIds();
+            var lines = _model.GetLinesWithIds();
+            object[] ids = new object[ShapeDataGridView.Rows.Count];
+            for (int i = 0; i < ShapeDataGridView.Rows.Count; i++)
             {
-                shape.Draw(adapter);
+                ids[i] = ShapeDataGridView.Rows[i].Cells["ID"].Value;
+            }
+            foreach (var kvp in shapes)
+            {
+                int id = kvp.Key;
+                Shape shape = kvp.Value;
                 shape.UpdateTextWidth(adapter);
+                shape.Draw(adapter);
+                int rowIndex = _dataGridPreModel.FindRowIndexById(ids, id);
+                _updatePreModel.ProcessShapeData(rowIndex, id, shape);
+            }
+            foreach (var kvp in lines)
+            {
+                int id = kvp.Key;
+                Line line = kvp.Value;
+                line.Draw(adapter);
+                int rowIndex = _dataGridPreModel.FindRowIndexById(ids, id);
+                _updatePreModel.ProcessLineData(rowIndex, id, line);
             }
 
             _controller.RenderTempShape(adapter);
             _controller.RenderTempSlection(adapter);
+            _controller.RenderTempLine(adapter);
         }
 
         public string GetSelectedShapeType()
@@ -255,24 +278,20 @@ namespace 視窗流程圖
         private void ShapeDataGridViewClick(object sender, DataGridViewCellEventArgs e)
         {
             int deleteButtonColumnIndex = ShapeDataGridView.Columns["DeleteButton"].Index;
-            _dataGridPreModel.HandleDeleteRequest(e.ColumnIndex, e.RowIndex, deleteButtonColumnIndex);
+            _dataGridPreModel.HandleDeleteRequest(e.ColumnIndex, e.RowIndex, deleteButtonColumnIndex, ShapeDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString());
         }
 
-        public void AddShapeToGrid(int id, ShapeData shapeData)
+        public void RemoveFromGrid(int rowIndex)
         {
-            ShapeDataGridView.Rows.Add("刪除", id, shapeData.ShapeType, shapeData.ShapeName, shapeData.X, shapeData.Y, shapeData.Height, shapeData.Width);
-        }
-
-        public void RemoveShapeFromGrid(int rowIndex)
-        {
-            object[] row = new object[ShapeDataGridView.ColumnCount];
-            for (int i = 0; i < ShapeDataGridView.ColumnCount; i++)
-            {
-                row[i] = ShapeDataGridView.Rows[rowIndex].Cells[i].Value;
-            }
-            int id = Convert.ToInt32(row[1]);
-            ShapeData delShapeData = new ShapeData { ShapeType = row[2].ToString(), ShapeName = row[3].ToString(), X = row[4].ToString(), Y = row[5].ToString(), Width = row[6].ToString(), Height = row[7].ToString() };
             ShapeDataGridView.Rows.RemoveAt(rowIndex);
+            //object[] row = new object[ShapeDataGridView.ColumnCount];
+            //for (int i = 0; i < ShapeDataGridView.ColumnCount; i++)
+            //{
+            //    row[i] = ShapeDataGridView.Rows[rowIndex].Cells[i].Value;
+            //}
+            //int id = Convert.ToInt32(row[1]);
+            //ShapeData delShapeData = new ShapeData { ShapeType = row[2].ToString(), ShapeName = row[3].ToString(), X = row[4].ToString(), Y = row[5].ToString(), Width = row[6].ToString(), Height = row[7].ToString() };
+
         }
 
         public int GetIdFromRow(int rowIndex)

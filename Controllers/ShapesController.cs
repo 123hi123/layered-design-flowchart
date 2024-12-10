@@ -63,25 +63,15 @@ namespace 視窗流程圖.Controllers
         // 處理滑鼠是否繪畫完成？
         public void HandleMouseUp(MouseEventArgs e)
         {
-            
+            // 有圖形，先算圖形再把圖形的內容重置 不過目前的實現方法不是很好
             if (e.Button == MouseButtons.Left && _currentState.StartPoint.HasValue && _currentState.CurrentPoint.HasValue && _currentState.CurrentPoint!=_currentState.StartPoint)
             {
                 // 通過模型計算圖形數據
                 ShapeData shapeData = _model.CalculateShapeData(_currentState.StartPoint.Value, _currentState.CurrentPoint.Value, _view.GetSelectedShapeType());
-                int id = _model.AddShape(shapeData);
-
-                _view.AddShapeToGrid(id, shapeData);
-
-                // 重置狀態
-                _view.Cursor = Cursors.Default;
-
-                _view.IntoSelectMode();
+                _model.AddShapeByShapeData(shapeData);
             }
-            if (e.Button == MouseButtons.Left && _currentState.SelectedIndex > -1)
-            {
-                _view.UpdateShapeInGrid(_currentState.SelectedIndex, _currentState.SelectedShape);
-            }
-            _currentState.MouseUp();
+            _view.Cursor = Cursors.Default;
+            _currentState.MouseUp(e.Location.X, e.Location.Y);
         }
 
         // 使用 IGraphics 處理臨時形狀的繪製
@@ -97,29 +87,53 @@ namespace 視窗流程圖.Controllers
                 tempShape?.Draw(g); // 使用 IGraphics 進行繪製
             }
         }
+        public void RenderTempLine(IGraphics g)
+        {
+            if (_currentState.TempStart.HasValue && _currentState.TempEnd.HasValue)
+            {
+                g.DrawLine(_currentState.TempStart.Value.X, _currentState.TempStart.Value.Y, _currentState.TempEnd.Value.X, _currentState.TempEnd.Value.Y);
+            }
+            if (_currentState.TouchedPoint.HasValue)
+            {
+                g.DrawLineRedDot(_currentState.TouchedPoint.Value.X, _currentState.TouchedPoint.Value.Y);
+            }
+        }
         public void RenderTempSlection(IGraphics g)
         {
             if (_currentState.SelectedShape != null)
             {
                 Shape shape = _currentState.SelectedShape;
-                g.DrawSelectionFrame(shape.X, shape.Y, shape.Width, shape.Height);
-                g.DrawTextWithRedFrame(shape.TextX, shape.TextY, shape.ShapeName);
+                if (_currentState.DrawingFrameType == "Normal")
+                {
+                    g.DrawSelectionFrame(shape.X, shape.Y, shape.Width, shape.Height);
+                    g.DrawTextWithRedFrame(shape.TextX, shape.TextY, shape.ShapeName);
+                }
+                else if (_currentState.DrawingFrameType == "DrawingLine")
+                {
+                    g.DrawLineSelectionFrame(shape.X, shape.Y, shape.Width, shape.Height);
+                }
             }
         }
 
         // 添加輸入形狀的方法
         public void InputShape(ShapeData shapeData)
         {
-            int id = _model.AddShape(shapeData);
-            _view.AddShapeToGrid(id, shapeData);
+            _model.AddShapeByShapeData(shapeData);
         }
 
         // 刪除形狀的方法
         public void DeleteShape(int rowIndex)
         {
             int id = Convert.ToInt32(_view.GetIdFromRow(rowIndex));
+            _view.RemoveFromGrid(rowIndex);
             _model.RemoveShape(id);
-            _view.RemoveShapeFromGrid(rowIndex);
+            
+        }
+        public void DeleteLine(int rowIndex)
+        {
+            int id = Convert.ToInt32(_view.GetIdFromRow(rowIndex));
+            _model.RemoveLine(id);
+            _view.RemoveFromGrid(rowIndex);
         }
 
         // 根據 rowIndex 獲取 Shape
