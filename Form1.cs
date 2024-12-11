@@ -18,7 +18,6 @@ namespace 視窗流程圖
         private ShapeInputPreModel _shapeInputPreModel;
         private DataGridPreModel _dataGridPreModel;
         private Label _shapeInputPreModelDisplay;
-        //private TextEditPreModel _textEditPreModel;
         private UpdatePreModel _updatePreModel;
 
 
