@@ -100,7 +100,6 @@ namespace 視窗流程圖.Controllers
             if (_currentState.SelectedShape != null)
             {
                 int id = _currentState.SelectedIndex;
-                //Shape shape = _currentState.SelectedShape;
                 if (_currentState.DrawingFrameType == "Normal")
                 {
                     Shape shape = _model.GetShape(id);
