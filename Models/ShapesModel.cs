@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using 視窗流程圖.Adapter;
 using 視窗流程圖.Commands;
 
@@ -12,16 +13,25 @@ namespace 視窗流程圖.Models
     {
         private Dictionary<int, Shape> _shapes = new Dictionary<int, Shape>();
         private Dictionary<int, Line> _lines = new Dictionary<int, Line>();
-        private CommandManager _commandManager = new CommandManager(); // 用于管理命令
+        private CommandManager _commandManager ; // 用于管理命令
+        
 
         private int _nextId = 0; // 用于生成唯一的 ID
         public event Action ReRenderSign;
         public event Action IntoSelectionSign;
         public event Action<int> DataGridRemoveById;
         public event Action<int, Shape> DoubleClickOnTextEvent;
+        public event Action<bool, bool> UndoRedoEvent;
         // New event for adding a line to the DataGridView
         
-
+        public ShapesModel()
+        {
+            _commandManager = new CommandManager(this);
+        }
+        public void ChangeOfCommandHistory()
+        {
+            UndoRedoEvent?.Invoke(_commandManager.UndoState(), _commandManager.RedoState());
+        }
         public virtual (int id, Shape shape) FindShapeAtPosition(int x, int y)
         {
             foreach (var kvp in _shapes)
@@ -67,6 +77,7 @@ namespace 視窗流程圖.Models
         {
             int id = _nextId++;
             _commandManager.ExecuteCommand(new AddLineCommand(this, line, id));
+            
         }
         public void InsertLine(int id, Line line)
         {
@@ -76,6 +87,7 @@ namespace 視窗流程圖.Models
         public void RemoveLineCommand(int id)//nothis
         {
             _commandManager.ExecuteCommand(new RemoveLineCommand(this, GetLine(id), id));
+
         }
         public void MoveCommand(Shape shape, Point2D ori, Point2D oriText, Point2D newPos, Point2D newText)
         {

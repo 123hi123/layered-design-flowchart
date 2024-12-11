@@ -31,15 +31,15 @@ namespace 視窗流程圖
             _shapeInputPreModel = new ShapeInputPreModel();
             _dataGridPreModel = new DataGridPreModel();
             _controller = new ShapesController(this, _model);
-            //_textEditPreModel = new TextEditPreModel();
+            
             _updatePreModel = new UpdatePreModel();
             _updatePreModel.AddNewRowEvent += AddNewRowToDataGridView;
             _updatePreModel.UpdateExistingRowEvent += UpdateExistingRowInDataGridView;
-
-            // 綁定 ShapeUpdated 事件
-            //_textEditPreModel.ShapeUpdated += (id, shape) => UpdateShapeInGrid(id, shape);
+            
             _model.IntoSelectionSign += IntoSelectMode;
             _model.DataGridRemoveById += DataGridRemoveById;
+            _model.UndoRedoEvent += UpdateUndoRedoButtons;
+            _model.ChangeOfCommandHistory();
 
 
             InitializeShapeInputPreModelDisplay();
@@ -190,7 +190,11 @@ namespace 視窗流程圖
         {
             UpdateToolStrip();
         }
-
+        private void UpdateUndoRedoButtons(bool undo, bool redo)
+        {
+            toolStripButton7.Enabled = undo;
+            toolStripButton8.Enabled = redo;
+        }
         private void UpdateToolStrip()
         {
             toolStripButton1.Checked = _shapeSelectPreModel.ButtonStates[ShapeSelectPreModel.ShapeType.Start];
@@ -293,14 +297,6 @@ namespace 視窗流程圖
         public void RemoveFromGrid(int rowIndex)
         {
             ShapeDataGridView.Rows.RemoveAt(rowIndex);
-            //object[] row = new object[ShapeDataGridView.ColumnCount];
-            //for (int i = 0; i < ShapeDataGridView.ColumnCount; i++)
-            //{
-            //    row[i] = ShapeDataGridView.Rows[rowIndex].Cells[i].Value;
-            //}
-            //int id = Convert.ToInt32(row[1]);
-            //ShapeData delShapeData = new ShapeData { ShapeType = row[2].ToString(), ShapeName = row[3].ToString(), X = row[4].ToString(), Y = row[5].ToString(), Width = row[6].ToString(), Height = row[7].ToString() };
-
         }
 
         public int GetIdFromRow(int rowIndex)
