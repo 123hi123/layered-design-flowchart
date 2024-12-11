@@ -99,15 +99,24 @@ namespace 視窗流程圖.Controllers
         {
             if (_currentState.SelectedShape != null)
             {
-                Shape shape = _currentState.SelectedShape;
+                int id = _currentState.SelectedIndex;
+                //Shape shape = _currentState.SelectedShape;
                 if (_currentState.DrawingFrameType == "Normal")
                 {
-                    g.DrawSelectionFrame(shape.X, shape.Y, shape.Width, shape.Height);
-                    g.DrawTextWithRedFrame(shape.TextX, shape.TextY, shape.ShapeName);
+                    Shape shape = _model.GetShape(id);
+                    if (shape != null)
+                    {
+                        g.DrawSelectionFrame(shape.X, shape.Y, shape.Width, shape.Height);
+                        g.DrawTextWithRedFrame(shape.TextX, shape.TextY, shape.ShapeName);
+                    }
                 }
                 else if (_currentState.DrawingFrameType == "DrawingLine")
                 {
-                    g.DrawLineSelectionFrame(shape.X, shape.Y, shape.Width, shape.Height);
+                    Shape shape = _model.GetShape(id);
+                    if (shape != null)
+                    {
+                        g.DrawLineSelectionFrame(shape.X, shape.Y, shape.Width, shape.Height);
+                    }
                 }
             }
         }
