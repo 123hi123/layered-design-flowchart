@@ -19,7 +19,7 @@ namespace 視窗流程圖.Models
 
         public abstract bool ContainsPoint(int x, int y);
 
-        public bool IsWithinOrangeDotRange(int x, int y)
+        public virtual bool IsWithinOrangeDotRange(int x, int y)
         {
             float dotX = this.TextX + this.TextWidth / 2;
             float dotY = this.TextY;
@@ -31,7 +31,7 @@ namespace 視窗流程圖.Models
             return Math.Pow(x - dotX, 2) + Math.Pow(y - dotY, 2) <= Math.Pow(dotRadius, 2);
         }
 
-        public void UpdateTextWidth(IGraphics graphics)
+        public virtual void UpdateTextWidth(IGraphics graphics)
         {
             this.TextWidth = graphics.GetTextWidth(this.ShapeName);
         }
@@ -52,7 +52,7 @@ namespace 視窗流程圖.Models
         }
 
         // 修改：檢查點是否在小圓點內，使用 int 參數
-        public int CheckPointInSmallCircle(int x, int y)
+        public virtual int CheckPointInSmallCircle(int x, int y)
         {
             int halfWidth = Width / 2;
             int halfHeight = Height / 2;

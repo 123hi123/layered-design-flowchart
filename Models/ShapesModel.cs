@@ -1,4 +1,4 @@
-﻿﻿﻿﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +13,8 @@ namespace 視窗流程圖.Models
     {
         private Dictionary<int, Shape> _shapes = new Dictionary<int, Shape>();
         private Dictionary<int, Line> _lines = new Dictionary<int, Line>();
-        private CommandManager _commandManager ; // 用于管理命令
-        
+        private CommandManager _commandManager; // 用于管理命令
+
 
         private int _nextId = 0; // 用于生成唯一的 ID
         public event Action ReRenderSign;
@@ -23,12 +23,14 @@ namespace 視窗流程圖.Models
         public event Action<int, Shape> DoubleClickOnTextEvent;
         public event Action<bool, bool> UndoRedoEvent;
         // New event for adding a line to the DataGridView
-        
+
+        public int NextId => _nextId;
+
         public ShapesModel()
         {
             _commandManager = new CommandManager(this);
         }
-        public void ChangeOfCommandHistory()
+        public virtual void ChangeOfCommandHistory()
         {
             UndoRedoEvent?.Invoke(_commandManager.UndoState(), _commandManager.RedoState());
         }
@@ -44,7 +46,7 @@ namespace 視窗流程圖.Models
             return (-1, null);
         }
 
-        public ShapeData CalculateShapeData(Point2D startPoint, Point2D endPoint, string shapeType)
+        public virtual ShapeData CalculateShapeData(Point2D startPoint, Point2D endPoint, string shapeType)
         {
             float x = Math.Min(startPoint.X, endPoint.X);
             float y = Math.Min(startPoint.Y, endPoint.Y);
@@ -63,63 +65,63 @@ namespace 視窗流程圖.Models
                 Height = height.ToString()
             };
         }
-        public void TextChangeCommand(Shape shape, string ori,string text)
+        public virtual void TextChangeCommand(Shape shape, string ori, string text)
         {
             _commandManager.ExecuteCommand(new TextCommand(this, shape, ori, text));
         }
 
-        public void AddShapeByShapeData(ShapeData shapeData)
+        public virtual void AddShapeByShapeData(ShapeData shapeData)
         {
             Shape shape = Factories.ShapeFactory.CreateShape(shapeData);
             AddShapeCommand(shape);
         }
-        public void AddLineCoommand(Line line)//nothis
+        public virtual void AddLineCommand(Line line)//nothis
         {
             int id = _nextId++;
             _commandManager.ExecuteCommand(new AddLineCommand(this, line, id));
-            
+
         }
-        public void InsertLine(int id, Line line)
+        public virtual void InsertLine(int id, Line line)
         {
             _lines[id] = line;
             ReRenderSign?.Invoke();
-        }  
-        public void RemoveLineCommand(int id)//nothis
+        }
+        public virtual void RemoveLineCommand(int id)//nothis
         {
             _commandManager.ExecuteCommand(new RemoveLineCommand(this, GetLine(id), id));
 
         }
-        public void MoveCommand(Shape shape, Point2D ori, Point2D oriText, Point2D newPos, Point2D newText)
+        public virtual void MoveCommand(Shape shape, Point2D ori, Point2D oriText, Point2D newPos, Point2D newText)
         {
-            _commandManager.ExecuteCommand(new MoveTextShapeCommand(this,shape, ori, oriText, newPos, newText));
+            _commandManager.ExecuteCommand(new MoveTextShapeCommand(this, shape, ori, oriText, newPos, newText));
         }
-        public void ReRender()
+        public virtual void ReRender()
         {
             ReRenderSign?.Invoke();
         }
-        public void RemoveLine(int id)
+        public virtual void RemoveLine(int id)
         {
             _lines.Remove(id);
             DataGridRemoveById?.Invoke(id);
             ReRenderSign?.Invoke();
         }
 
-        public void AddShapeCommand(Shape shape)
+        public virtual void AddShapeCommand(Shape shape)
         {
             int id = _nextId++;
             _commandManager.ExecuteCommand(new AddShapeCommand(this, shape, id));
         }
-        public void InsertShape(int id, Shape shape)
+        public virtual void InsertShape(int id, Shape shape)
         {
             _shapes[id] = shape;
             ReRenderSign?.Invoke();
         }
-        public void RemoveShapeCommand(int id)
+        public virtual void RemoveShapeCommand(int id)
         {
             _commandManager.ExecuteCommand(new RemoveShapeCommand(this, GetShape(id), id));
 
         }
-        public void RemoveShape(int id)
+        public virtual void RemoveShape(int id)
         {
             _shapes.Remove(id);
             DataGridRemoveById?.Invoke(id);
@@ -139,24 +141,24 @@ namespace 視窗流程圖.Models
             return new string(result);
         }
 
-        public List<Shape> GetShapes()
+        public virtual List<Shape> GetShapes()
         {
             return _shapes.Values.ToList();
         }
-        public List<Line> GetLines()
+        public virtual List<Line> GetLines()
         {
             return _lines.Values.ToList();
         }
-        public IEnumerable<KeyValuePair<int, Shape>> GetShapesWithIds()
+        public virtual IEnumerable<KeyValuePair<int, Shape>> GetShapesWithIds()
         {
             return _shapes;
         }
-        public IEnumerable<KeyValuePair<int, Line>> GetLinesWithIds()
+        public virtual IEnumerable<KeyValuePair<int, Line>> GetLinesWithIds()
         {
             return _lines;
         }
 
-        public Shape GetShape(int id)
+        public virtual Shape GetShape(int id)
         {
             if (_shapes.TryGetValue(id, out Shape shape))
             {
@@ -164,7 +166,7 @@ namespace 視窗流程圖.Models
             }
             return null;
         }
-        public Line GetLine(int id)
+        public virtual Line GetLine(int id)
         {
             if (_lines.TryGetValue(id, out Line line))
             {
@@ -173,22 +175,33 @@ namespace 視窗流程圖.Models
             return null;
         }
 
-        public void DoubleClickOnText(int id, Shape shape)
+        public virtual void DoubleClickOnText(int id, Shape shape)
         {
             DoubleClickOnTextEvent?.Invoke(id, shape);
         }
-        public void IntoSelection()
+        public virtual void IntoSelection()
         {
             IntoSelectionSign?.Invoke();
         }
-        public void Undo()
+        public virtual void Undo()
         {
             _commandManager.Undo();
         }
 
-        public void Redo()
+        public virtual void Redo()
         {
             _commandManager.Redo();
         }
+
+        //public virtual void ClearAllShapes()
+        //{
+        //    // Create a copy of the keys. If we delete while iterating over the keyset directly, it could cause exception.
+        //    List<int> shapeIds = _shapes.Keys.ToList();
+
+        //    foreach (int id in shapeIds)
+        //    {
+        //        RemoveShape(id); // Use the existing remove method to remove each shape by its id
+        //    }
+        //}
     }
 }

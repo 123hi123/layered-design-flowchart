@@ -323,5 +323,10 @@ namespace 視窗流程圖
                 form.ShowDialog();
             }
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

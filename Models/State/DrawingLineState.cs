@@ -17,11 +17,8 @@ namespace 視窗流程圖.States
         public Line Line;
         public int StartId, EndId;
         public Point2D? TempStart { get; private set; } = null;
-        
         public Point2D? TempEnd { get; private set; } = null;
         public Point2D? TouchedPoint { get; private set; } = null;
-
-
         public int SelectedIndex { get; private set; } = -1;
 
         protected ShapesModel _model;
@@ -31,18 +28,38 @@ namespace 視窗流程圖.States
             _model = model;
             DrawingFrameType = "DrawingLine";
         }
+
+        public void SetSelectedShape(Shape shape)
+        {
+            SelectedShape = shape;
+        }
+
+        public void SetSelectedIndex(int index)
+        {
+            SelectedIndex = index;
+        }
+
+        public void SetLine(Line line)
+        {
+            Line = line;
+        }
+
+        public void SetTempStart(Point2D? point)
+        {
+            TempStart = point;
+        }
+
         public void MouseDown(int x, int y, bool isDrawingMode)
         {
             if (SelectedShape != null)
             {
-                int Direct= SelectedShape.CheckPointInSmallCircle(x, y);
+                int Direct = SelectedShape.CheckPointInSmallCircle(x, y);
                 if (Direct != -1)
                 {
                     TempStart = SelectedShape.GetSmallCirclePosition(Direct);
                     Line = new Line(SelectedIndex, 0, Direct, 0, _model);
                 }
             }
-
         }
 
         public void MouseMove(int x, int y)
@@ -56,7 +73,7 @@ namespace 視窗流程圖.States
                 int Direct = SelectedShape.CheckPointInSmallCircle(x, y);
                 if (Direct != -1)
                 {
-                    TouchedPoint= SelectedShape.GetSmallCirclePosition(Direct);
+                    TouchedPoint = SelectedShape.GetSmallCirclePosition(Direct);
                 }
             }
             TempEnd = new Point2D(x, y);
@@ -65,16 +82,15 @@ namespace 視窗流程圖.States
         public void MouseUp(int x, int y)
         {
             // 先保存起始點，再清空 for command
-            if (SelectedShape != null && Line !=null)
+            if (SelectedShape != null && Line != null)
             {
                 int Direct = SelectedShape.CheckPointInSmallCircle(x, y);
-                if (Direct != -1 && !(Line.StartConnectionPoint==Direct&&Line.StartShapeId==SelectedIndex))
+                if (Direct != -1 && !(Line.StartConnectionPoint == Direct && Line.StartShapeId == SelectedIndex))
                 {
                     Line.EndShapeId = SelectedIndex;
                     Line.EndConnectionPoint = Direct;
-                    _model.AddLineCoommand(Line);
+                    _model.AddLineCommand(Line);
                 }
-                
             }
             TempStart = null;
             Line = null;

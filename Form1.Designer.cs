@@ -408,7 +408,7 @@ namespace 視窗流程圖
             // 關於ToolStripMenuItem
             // 
             this.關於ToolStripMenuItem.Name = "關於ToolStripMenuItem";
-            this.關於ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.關於ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.關於ToolStripMenuItem.Text = "關於";
             this.關於ToolStripMenuItem.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
             this.關於ToolStripMenuItem.MouseLeave += new System.EventHandler(this.ControlMouseLeave);
@@ -540,6 +540,7 @@ namespace 視窗流程圖
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "MyDrawing";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ShapeDataGridView)).EndInit();
